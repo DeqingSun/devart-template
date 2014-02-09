@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<style type="text/css">
+body { margin: 0px; overflow: hidden; }
+canvas { border: 0px ; }
+</style>
+
+<script type="text/javascript">
+
+var canvas;
+var ctx;
+var w = 0;
+var h = 0;
+
+var touch_cache=[];
+
+var frame_time = 1000.0/(30); //30fps
+var move_speed = 1.0/400;	//move 1/400 per second
+//var move_speed = 1.0/100;	//move 1/400 per second
+var text_size_px;
+
+var text_pos=[];
+var text_pos_y=[];
+
+function resize_canvas() {
+	var nw = window.innerWidth;
+	var nh = window.innerHeight;
+
+	if ((w != nw) || (h != nh)) {
+		w = nw;
+		h = nh;
+		canvas.style.width = w+'px';
+		canvas.style.height = h+'px';
+		canvas.width = w;
+		canvas.height = h;
+		
+		text_size_px = Math.round(h/20);
+		
+		for (var i=0;i<8;i++){
+			text_pos[i]=w;
+			text_pos_y[i]=h*(0.2+0.7*i/7);
+		}
+	}
+	
+}
+
+var text_arrays=[];
+var text_arrays_next=[];
+
+
+function setup_code(){
+	for (var i=0;i<8;i++){
+		text_arrays[i]="The quick brown fox jumps over the lazy dog. "
+		text_arrays_next[i]="Lorem ipsum dolor sit amet, consectetur adipisicing elit. "
+		if ((i%2)==0){
+			var tmp=text_arrays[i];	//swap for now!!!!!
+			text_arrays[i]=text_arrays_next[i];
+			text_arrays_next[i]=tmp;	
+		}
+	}
+
+	draw_code();
+}
+var frame_count=0;
+var str1="The quick brown fox jumps over the lazy dog";
+var loop_count=30*13;
+function draw_code(){
+	var d = new Date();
+	var frame_start_time=d.getTime();
+	frame_count++;
+	//console.log(frame_count);
+	var i;
+	ctx.clearRect(0,0,w,h);
+	ctx.font = text_size_px+"px Arial";	//draw main text
+	
+	for (var i=0;i<8;i++){
+		text_pos[i]-=move_speed*w;
+		ctx.fillText(text_arrays[i],text_pos[i],text_pos_y[i]);
+		var end_pos=text_pos[i]+ctx.measureText(text_arrays[i]).width;
+		ctx.fillText(text_arrays_next[i],end_pos,text_pos_y[i]);
+		if (end_pos<0){	//load new text;
+			text_pos[i]=end_pos;
+			var tmp=text_arrays[i];	//swap for now!!!!!
+			text_arrays[i]=text_arrays_next[i];
+			text_arrays_next[i]=tmp;
+		}
+	}
+	
+//	var txt="Hello World"
+//ctx.fillText("width:" + ctx.measureText(txt).width,10,50)//
+	
+	
+	
+	var d = new Date();
+	var frame_end_time=d.getTime();
+	var time_left_for_next_frame=(frame_time)-(frame_end_time-frame_start_time);	
+	if (time_left_for_next_frame<0) time_left_for_next_frame=0;
+	
+	window.setTimeout(function() {draw_code();}, time_left_for_next_frame);
+
+}
+
+
+function ol() {
+	canvas = document.getElementById('canvas');
+	ctx = canvas.getContext('2d');
+
+	canvas.addEventListener('touchend', function(event) {
+		event.preventDefault();	//prevent Default Action
+		//touch_cache=event.touches;
+		//touch_dealer();
+	});
+	
+	canvas.addEventListener('touchmove', function(event) {
+		event.preventDefault();
+		//touch_cache=event.touches;
+		//touch_dealer();
+	});
+	
+	canvas.addEventListener('touchstart', function(event) {
+		event.preventDefault();
+		//touch_cache=event.touches;
+		//touch_dealer();
+	});
+	
+	resize_canvas();
+	window.addEventListener('resize', function() {
+		resize_canvas();
+	}, true);
+	setup_code();
+
+}
+
+
+</script>
+
+</head>
+<body onload="ol()">
+<body>
+<canvas id="canvas" width="300" height="300" style="top:0px; left:0px; width: 300px; height: 300px;">Your browser does not support the HTML5 canvas tag.
+</canvas>
+</body>
+</html>
