@@ -18,8 +18,18 @@ var w = 0;
 var h = 0;
 
 var touch_cache=[];
+var trace_enable=false;
+var trace_x=[];
+var trace_y=[];
+var blackout_l=[];
+var blackout_r=[];
+
+
+var line_disabled=[];
+
 
 var frame_time = 1000.0/(30); //30fps
+//var frame_time = 1000.0/(1); //30fps
 var move_speed = 1.0/400;	//move 1/400 per second
 //var move_speed = 1.0/100;	//move 1/400 per second
 var text_size_px;
@@ -44,6 +54,8 @@ function resize_canvas() {
 		for (var i=0;i<8;i++){
 			text_pos[i]=w;
 			text_pos_y[i]=h*(0.2+0.7*i/7);
+			blackout_l[i]=0;
+			blackout_r[i]=w;
 		}
 	}
 	
@@ -62,6 +74,7 @@ function setup_code(){
 			text_arrays[i]=text_arrays_next[i];
 			text_arrays_next[i]=tmp;	
 		}
+		line_disabled[i]=false;
 	}
 
 	draw_code();
@@ -77,9 +90,13 @@ function draw_code(){
 	var i;
 	ctx.clearRect(0,0,w,h);
 	ctx.font = text_size_px+"px Arial";	//draw main text
+	ctx.textBaseline="bottom"; 
+	ctx.fillStyle = 'black';
 	
 	for (var i=0;i<8;i++){
-		text_pos[i]-=move_speed*w;
+		if (!line_disabled[i]){
+			text_pos[i]-=move_speed*w;
+		}
 		ctx.fillText(text_arrays[i],text_pos[i],text_pos_y[i]);
 		var end_pos=text_pos[i]+ctx.measureText(text_arrays[i]).width;
 		ctx.fillText(text_arrays_next[i],end_pos,text_pos_y[i]);
@@ -89,12 +106,58 @@ function draw_code(){
 			text_arrays[i]=text_arrays_next[i];
 			text_arrays_next[i]=tmp;
 		}
+		if (line_disabled[i]){	//draw blackout part
+			//text_pos[i]-=move_speed*w;
+			ctx.beginPath();
+			ctx.rect(0, text_pos_y[i], blackout_l[i], -text_size_px);
+			ctx.fillStyle = 'black';
+			ctx.fill();
+			ctx.rect(blackout_r[i], text_pos_y[i], w-blackout_r[i], -text_size_px);
+			ctx.fillStyle = 'black';
+			ctx.fill();
+		}
 	}
 	
-//	var txt="Hello World"
-//ctx.fillText("width:" + ctx.measureText(txt).width,10,50)//
+	if (!trace_enable){
+		var i;
+		for (i=0;i<8;i++){
+			if (line_disabled[i]) break;
+		}
+		if (i>=8){	//no line is disabled
+			ctx.beginPath();
+			ctx.rect(w*0.01, h*0.01, w*(1-2*0.01), h*(0.15-2*(0.01)));
+			ctx.fillStyle = '#f0f0f0';
+			ctx.fill();
+			var str="Press and hold in this area";
+			var text_width=ctx.measureText(str).width;
+			ctx.fillStyle = '#E0E0E0';
+			ctx.fillText(str,(w-text_width)/2,h*(0.15/2)+text_size_px/2);
+		}
+	}else{
+		ctx.beginPath();
+		ctx.rect(w*0.01, h*(1-0.01), w*(1-2*0.01), -h*(0.1-2*(0.01)));
+		ctx.fillStyle = '#f0f0f0';
+		ctx.fill();
+		var str="Release in this area";
+		var text_width=ctx.measureText(str).width;
+		ctx.fillStyle = '#E0E0E0';
+		ctx.fillText(str,(w-text_width)/2,h*(0.95)+text_size_px/2);
+	}
 	
 	
+	/*
+	//draw path
+	ctx.beginPath();
+	for (var i=0;i<trace_x.length;i++){
+		if (i==0){
+			ctx.moveTo(trace_x[i],trace_y[i]);
+		}else{
+			ctx.lineTo(trace_x[i],trace_y[i]);
+		}
+		
+	}
+	ctx.strokeStyle="green";
+	ctx.stroke();*/
 	
 	var d = new Date();
 	var frame_end_time=d.getTime();
@@ -106,6 +169,105 @@ function draw_code(){
 }
 
 
+function check_word(x_pos,line){
+	ctx.font = text_size_px+"px Arial";	//test main text
+	var str=text_arrays[line];
+	var ptr=0;
+	var start_pos=text_pos[line];
+	
+	if (x_pos<start_pos) return;	//avoid blanks
+	
+	var first_str_end=start_pos+ctx.measureText(str).width;
+	if (first_str_end<x_pos){
+		start_pos=first_str_end;
+		str=text_arrays_next[line];
+	}
+	
+	var last_pos_end=start_pos;
+	var last_ptr=ptr;
+	
+	var space_width=ctx.measureText(" ").width;
+	
+	while(ptr<str.length){
+		ptr=str.indexOf(" ",ptr+1);
+		if (ptr<0) break;
+		var pos_end=start_pos+ctx.measureText(str.substring(0,ptr)).width;
+		if (last_pos_end<=x_pos && pos_end>=x_pos){
+			var selected_word = str.substring(last_ptr,ptr);
+			blackout_l[line]=last_pos_end;
+			blackout_r[line]=pos_end;
+			
+			if (selected_word.charAt(0)==' '){
+				blackout_l[line]+=0.5*space_width;
+			}else{
+				blackout_l[line]-=0.5*space_width;
+			}
+			if (selected_word.charAt(selected_word.length-1)==' '){
+				blackout_r[line]-=0.5*space_width;
+			}else{
+				blackout_r[line]+=0.5*space_width;
+			}
+			line_disabled[line]=true;
+			break; 
+		}
+
+		last_ptr=ptr;
+		last_pos_end=pos_end;
+	}	
+}
+
+function start_trace(x,y){
+	var i;
+	for (i=0;i<8;i++){
+		if (line_disabled[i]) break;
+	}
+	if (i>=8 && y<h*0.15){	//no line is disabled
+		trace_enable=true;
+		console.log('down '+" "+ x +" "+ y );
+		trace_x=[];
+		trace_y=[];
+	}
+}
+function move_trace(x,y){
+	if (trace_enable){
+		var last_x=trace_x[trace_x.length-1];
+		var last_y=trace_y[trace_y.length-1];
+		var this_x=x;
+		var this_y=y;
+		
+		for (var i=0;i<8;i++){
+			if (!line_disabled[i]){
+				if (last_y<text_pos_y[i] && this_y>text_pos_y[i]){
+					var portion=(text_pos_y[i]-last_y)/(this_y-last_y);
+					var x_pos=last_x+portion*(this_x-last_x);			
+					check_word(x_pos,i);
+				}
+			}
+		}
+		
+		trace_x.push(this_x);
+		trace_y.push(this_y);			
+	}		
+}
+
+function end_trace(x,y){
+	if (trace_enable){
+		trace_enable=false;
+		console.log('up '+" "+ x +" "+ y );
+		var i;
+		for (i=0;i<8;i++){
+			if (line_disabled[i]) break;
+		}	
+		if (i<8){	
+			setTimeout(function(){
+				for (var i=0;i<8;i++){
+					line_disabled[i]=false;
+				}
+			},3000);
+		}
+	}	
+}
+
 function ol() {
 	canvas = document.getElementById('canvas');
 	ctx = canvas.getContext('2d');
@@ -114,19 +276,37 @@ function ol() {
 		event.preventDefault();	//prevent Default Action
 		//touch_cache=event.touches;
 		//touch_dealer();
+		end_trace(0,0);	//maybe last point in future version
 	});
 	
 	canvas.addEventListener('touchmove', function(event) {
 		event.preventDefault();
 		//touch_cache=event.touches;
 		//touch_dealer();
+		move_trace(event.touches[0].pageX,event.touches[0].pageY);
 	});
 	
 	canvas.addEventListener('touchstart', function(event) {
 		event.preventDefault();
 		//touch_cache=event.touches;
 		//touch_dealer();
+		start_trace(event.touches[0].pageX,event.touches[0].pageY);
 	});
+	
+	canvas.addEventListener('mousedown', function(event) {
+		event.preventDefault();
+		start_trace(event.clientX,event.clientY);
+	}, false);
+	
+	canvas.addEventListener('mouseup', function(event) {
+		event.preventDefault();
+		end_trace(event.clientX,event.clientY);
+	}, false);
+	
+	canvas.addEventListener('mousemove', function(event) {
+		event.preventDefault();
+		move_trace(event.clientX,event.clientY);
+	}, false);
 	
 	resize_canvas();
 	window.addEventListener('resize', function() {
