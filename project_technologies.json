@@ -7,7 +7,9 @@
             "Google App Engine"
         ],
         "toolkits": [
-            "insert toolkits"
+            "html5",
+            "AJAX",
+            "JavaScript"
         ]
     },
     "themes": [

@@ -53,7 +53,7 @@ handlers:
   upload: static/(.*\.html)
  
 - url: /.*
-  script: index.py
+  script: main.application
 
 
 skip_files:

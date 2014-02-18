@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+
+<script type="text/javascript">
+function submit_content()
+{
+	var str = document.getElementById("content_Textarea").value;
+	var http = new XMLHttpRequest();
+	var url = "submit";
+	var params = "content="+str;
+	http.open("GET", url+"?"+params, true);
+	http.onreadystatechange = function() {//Call a function when the state changes.
+		if(http.readyState == 4 && http.status == 200) {
+			if (http.responseText.indexOf("OK")>=0){
+				alert("Your content has been added");
+			}else{
+				alert(http.responseText);
+			}
+		}
+	}
+	http.send(null);
+}
+
+</script>
+
+</head>
+
+<body>
+<p>Please input between 60~200 characters</p>
+<div><textarea id="content_Textarea" name="content" rows="10" cols="60"></textarea></div>
+<button type="button" onclick="submit_content()">submit some new content</button>
+<p><a href=".">back</a></p>
+
+
+
+</body>
+</html>

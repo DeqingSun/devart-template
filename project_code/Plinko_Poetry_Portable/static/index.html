@@ -37,6 +37,13 @@ var text_size_px;
 var text_pos=[];
 var text_pos_y=[];
 
+var submit_btn_x=0.79;
+var submit_btn_w=0.2;
+var submit_btn_y=0.91;
+var submit_btn_h=0.08;
+
+
+
 function resize_canvas() {
 	var nw = window.innerWidth;
 	var nh = window.innerHeight;
@@ -64,16 +71,12 @@ function resize_canvas() {
 var text_arrays=[];
 var text_arrays_next=[];
 
+var text_array_server=[];
 
 function setup_code(){
 	for (var i=0;i<8;i++){
-		text_arrays[i]="The quick brown fox jumps over the lazy dog. "
-		text_arrays_next[i]="Lorem ipsum dolor sit amet, consectetur adipisicing elit. "
-		if ((i%2)==0){
-			var tmp=text_arrays[i];	//swap for now!!!!!
-			text_arrays[i]=text_arrays_next[i];
-			text_arrays_next[i]=tmp;	
-		}
+		text_arrays[i]=text_array_server[i];
+		text_arrays_next[i]=text_array_server[8+i];
 		line_disabled[i]=false;
 	}
 
@@ -124,14 +127,25 @@ function draw_code(){
 			if (line_disabled[i]) break;
 		}
 		if (i>=8){	//no line is disabled
-			ctx.beginPath();
+			ctx.beginPath();	//draw "Press and hold in this area"
 			ctx.rect(w*0.01, h*0.01, w*(1-2*0.01), h*(0.15-2*(0.01)));
 			ctx.fillStyle = '#f0f0f0';
 			ctx.fill();
 			var str="Press and hold in this area";
+			ctx.font = text_size_px+"px Arial";	//draw main text
 			var text_width=ctx.measureText(str).width;
 			ctx.fillStyle = '#E0E0E0';
 			ctx.fillText(str,(w-text_width)/2,h*(0.15/2)+text_size_px/2);
+			//draw submit new content
+			ctx.beginPath();	//draw "Press and hold in this area"
+			ctx.rect(w*submit_btn_x, h*submit_btn_y, w*submit_btn_w, h*submit_btn_h);
+			ctx.fillStyle = '#f0f0f0';
+			ctx.fill();
+			var str="Submit new content";
+			ctx.font = (text_size_px*.5)+"px Arial";	//draw smaller text
+			var text_width=ctx.measureText(str).width;
+			ctx.fillStyle = '#D0D0D0';
+			ctx.fillText(str,w*submit_btn_x+(w*submit_btn_w-text_width)/2,h*(submit_btn_y+submit_btn_h/2)+text_size_px/4);
 		}
 	}else{
 		ctx.beginPath();
@@ -139,6 +153,7 @@ function draw_code(){
 		ctx.fillStyle = '#f0f0f0';
 		ctx.fill();
 		var str="Release in this area";
+		ctx.font = text_size_px+"px Arial";	//draw main text
 		var text_width=ctx.measureText(str).width;
 		ctx.fillStyle = '#E0E0E0';
 		ctx.fillText(str,(w-text_width)/2,h*(0.95)+text_size_px/2);
@@ -218,6 +233,15 @@ function check_word(x_pos,line){
 
 function start_trace(x,y){
 	var i;
+	//detect buttons;
+	var x_po=x/w;
+	var y_po=y/h;
+	if (x_po>submit_btn_x && x_po<(submit_btn_x+submit_btn_w)){
+		if (y_po>submit_btn_y && y_po<(submit_btn_y+submit_btn_h)){
+			window.location.href = "submit_content.html";
+		}
+	}
+	
 	for (i=0;i<8;i++){
 		if (line_disabled[i]) break;
 	}
@@ -312,7 +336,26 @@ function ol() {
 	window.addEventListener('resize', function() {
 		resize_canvas();
 	}, true);
-	setup_code();
+	
+	
+	var http = new XMLHttpRequest();
+	var url = "recent";
+	http.open("GET", url, true);
+	http.onreadystatechange = function() {//Call a function when the state changes.
+		if(http.readyState == 4 && http.status == 200) {
+			text_array_server=http.responseText.trim().split('\n');
+			if (text_array_server.length<16) alert("Load text ERR, please refresh");
+			setup_code();
+		}else if(http.status != 200){
+			console.log("LOAD!FAIL!" + http.readyState+" " + http.status);
+			alert("Load text failed, please refresh");
+			//ahttp.send(null);
+		}
+	}
+	http.send(null);
+	
+	
+	
 
 }
 
