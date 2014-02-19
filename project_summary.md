@@ -1,5 +1,5 @@
-# Project Title
-Plinko Poetry Portable
+# Plinko Poetry Portable
+
 
 ## Authors
 - Deqing, Sun, https://github.com/DeqingSun
