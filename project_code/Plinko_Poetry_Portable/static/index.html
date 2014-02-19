@@ -41,7 +41,8 @@ var text_pos_y=[];
 
 var submit_btn=[0.79,0.2,0.91,0.08];	//x,w,y,h
 var like_btn=[];
-var dislike_btn=[]
+var dislike_btn=[];
+var poem_score=0;
 
 //var like_btn_x,like_btn_w,like_btn_y,like_btn_h;
 //var dislike_btn_x,dislike_btn_w,like_btn_y,like_btn_h;
@@ -162,28 +163,41 @@ function draw_code(){
 	}
 	
 	if (a_valid_poem){
-		ctx.font = text_size_px+"px Arial";	//draw main text
-		var spa_w=ctx.measureText(" ").width;
-		var str="Like";
-		var text_width=ctx.measureText(str).width;
-		like_btn[0]=0.01+spa_w/w; 		//x
-		like_btn[1]=text_width/w; 		//w
-		like_btn[3]=text_size_px/w; 	//h
-		like_btn[2]=0.95-like_btn[3]/2; //y
-		ctx.fillStyle = '#80FF80';
-		ctx.fillText(str,w*like_btn[0],h*(like_btn[2]+like_btn[3]));
-		var str="or";
-		var text_width=ctx.measureText(str).width;
-		ctx.fillStyle = '#E0E0E0';
-		var or_pos=w*(like_btn[0]+like_btn[1])+spa_w;
-		ctx.fillText(str,or_pos,h*(like_btn[2]+like_btn[3]));
-		dislike_btn[0]=(or_pos+text_width+spa_w)/w; 		//x
-		var str="Dislike";
-		var text_width=ctx.measureText(str).width;
-		ctx.fillStyle = '#FF8080';
-		dislike_btn[1]=text_width/w;
-		dislike_btn[2]=like_btn[2];dislike_btn[3]=like_btn[3];
-		ctx.fillText(str,w*dislike_btn[0],h*(dislike_btn[2]+dislike_btn[3]));
+		if (poem_score==0){
+			ctx.font = text_size_px+"px Arial";	//draw main text
+			var spa_w=ctx.measureText(" ").width;
+			var str="Like";
+			var text_width=ctx.measureText(str).width;
+			like_btn[0]=0.01+spa_w/w; 		//x
+			like_btn[1]=text_width/w; 		//w
+			like_btn[3]=text_size_px/w; 	//h
+			like_btn[2]=0.95-like_btn[3]/2; //y
+			ctx.fillStyle = '#80FF80';
+			ctx.fillText(str,w*like_btn[0],h*(like_btn[2]+like_btn[3]));
+			var str="or";
+			var text_width=ctx.measureText(str).width;
+			ctx.fillStyle = '#E0E0E0';
+			var or_pos=w*(like_btn[0]+like_btn[1])+spa_w;
+			ctx.fillText(str,or_pos,h*(like_btn[2]+like_btn[3]));
+			dislike_btn[0]=(or_pos+text_width+spa_w)/w; 		//x
+			var str="Dislike";
+			var text_width=ctx.measureText(str).width;
+			ctx.fillStyle = '#FF8080';
+			dislike_btn[1]=text_width/w;
+			dislike_btn[2]=like_btn[2];dislike_btn[3]=like_btn[3];
+			ctx.fillText(str,w*dislike_btn[0],h*(dislike_btn[2]+dislike_btn[3]));
+		}else{
+			ctx.font = text_size_px+"px Arial";	//draw main text
+			if (poem_score>0){
+				var str="+1";
+				ctx.fillStyle = '#80FF80';
+				ctx.fillText(str,w*like_btn[0],h*(like_btn[2]+like_btn[3]));
+			}else{
+				var str="-1";
+				ctx.fillStyle = '#FF8080';
+				ctx.fillText(str,w*dislike_btn[0],h*(dislike_btn[2]+dislike_btn[3]));
+			}
+		}
 		
 	}
 	/*
@@ -270,9 +284,9 @@ function start_trace(x,y){
 	var x_po=x/w;
 	var y_po=y/h;
 	if (check_area(x_po,y_po,submit_btn)) window.location.href = "submit_content.html";
-	if (a_valid_poem){
-		if (check_area(x_po,y_po,like_btn)) {console.log("Like"); alert("Like will be implemented later")};
-		if (check_area(x_po,y_po,dislike_btn)) {console.log("Dislike"); alert("Disike will be implemented later")};
+	if (a_valid_poem && poem_score==0){
+		if (check_area(x_po,y_po,like_btn)) {console.log("Like"); poem_score=1};
+		if (check_area(x_po,y_po,dislike_btn)) {console.log("Dislike"); poem_score=-1};
 	}
 	
 	for (i=0;i<8;i++){
@@ -317,7 +331,10 @@ function end_trace(x,y){
 			if (line_disabled[i]) selected_lines++;
 		}
 		if (selected_lines>0){	
-			if (selected_lines>=8) a_valid_poem=true;
+			if (selected_lines>=8) {
+				a_valid_poem=true;
+				poem_score=0;
+			}
 			setTimeout(function(){
 				a_valid_poem=false;
 				for (var i=0;i<8;i++){
