@@ -47,9 +47,24 @@ class Submit_data(webapp2.RequestHandler):
                 self.response.write("Your " + str(str_len) + " characters context isn't between 60 to 200 characters")
         else:
             self.response.write("Special characters are not allowed");
+            
+class New_Poem(webapp2.RequestHandler):
+    def get(self):
+        self.response.headers['Content-Type'] = 'text/plain';
+        poem = self.request.get('poem');
+        if (re.match("^[\,\.\?\!\;\' A-Za-z0-9_-]*$", poem)):
+            comment = self.request.get('comment');
+            if (comment=="G"):
+                comment="GOOD";
+            if (comment=="B"):
+                comment="BAD";
+            self.response.write("A "+comment+" poem is:"+poem);
+        else:
+            self.response.write("Special characters are not allowed");
 
 
 application = webapp2.WSGIApplication([
     ('/submit', Submit_data),
     ('/recent', Recent_data),
+    ('/new_poem', New_Poem),
 ], debug=True)

@@ -23,6 +23,7 @@ var trace_x=[];
 var trace_y=[];
 var blackout_l=[];
 var blackout_r=[];
+var words_selected=[];
 
 
 var line_disabled=[];
@@ -249,6 +250,7 @@ function check_word(x_pos,line){
 		var pos_end=start_pos+ctx.measureText(str.substring(0,ptr)).width;
 		if (last_pos_end<=x_pos && pos_end>=x_pos){
 			var selected_word = str.substring(last_ptr,ptr);
+			words_selected[line]=selected_word.trim();
 			blackout_l[line]=last_pos_end;
 			blackout_r[line]=pos_end;
 			
@@ -270,6 +272,23 @@ function check_word(x_pos,line){
 		last_pos_end=pos_end;
 	}	
 }
+
+function submit_a_poem(comment){
+	var poem=words_selected.join(' ');
+	console.log("A poem has been submitted");
+	
+	var http = new XMLHttpRequest();
+	var url = "new_poem";
+	var params = "comment="+comment+"&poem="+poem;
+	http.open("GET", url+"?"+params, true);
+	http.onreadystatechange = function() {//Call a function when the state changes.
+		if(http.readyState == 4 && http.status == 200) {
+			console.log(http.responseText);
+		}
+	}
+	http.send(null);
+}
+
 function check_area(x,y,arr){
 	if (x>arr[0] && x<(arr[0]+arr[1])){	//x w
 		if (y>arr[2] && y<(arr[2]+arr[3])){	//y h
@@ -285,8 +304,8 @@ function start_trace(x,y){
 	var y_po=y/h;
 	if (check_area(x_po,y_po,submit_btn)) window.location.href = "submit_content.html";
 	if (a_valid_poem && poem_score==0){
-		if (check_area(x_po,y_po,like_btn)) {console.log("Like"); poem_score=1};
-		if (check_area(x_po,y_po,dislike_btn)) {console.log("Dislike"); poem_score=-1};
+		if (check_area(x_po,y_po,like_btn)) {submit_a_poem('G'); poem_score=1};
+		if (check_area(x_po,y_po,dislike_btn)) {submit_a_poem('B'); poem_score=-1};
 	}
 	
 	for (i=0;i<8;i++){
