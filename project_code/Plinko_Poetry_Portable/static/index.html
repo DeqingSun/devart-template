@@ -27,6 +27,8 @@ var blackout_r=[];
 
 var line_disabled=[];
 
+var a_valid_poem=false;
+
 
 var frame_time = 1000.0/(30); //30fps
 //var frame_time = 1000.0/(1); //30fps
@@ -37,12 +39,12 @@ var text_size_px;
 var text_pos=[];
 var text_pos_y=[];
 
-var submit_btn_x=0.79;
-var submit_btn_w=0.2;
-var submit_btn_y=0.91;
-var submit_btn_h=0.08;
+var submit_btn=[0.79,0.2,0.91,0.08];	//x,w,y,h
+var like_btn=[];
+var dislike_btn=[]
 
-
+//var like_btn_x,like_btn_w,like_btn_y,like_btn_h;
+//var dislike_btn_x,dislike_btn_w,like_btn_y,like_btn_h;
 
 function resize_canvas() {
 	var nw = window.innerWidth;
@@ -138,14 +140,14 @@ function draw_code(){
 			ctx.fillText(str,(w-text_width)/2,h*(0.15/2)+text_size_px/2);
 			//draw submit new content
 			ctx.beginPath();	//draw "Press and hold in this area"
-			ctx.rect(w*submit_btn_x, h*submit_btn_y, w*submit_btn_w, h*submit_btn_h);
+			ctx.rect(w*submit_btn[0], h*submit_btn[2], w*submit_btn[1], h*submit_btn[3]);
 			ctx.fillStyle = '#f0f0f0';
 			ctx.fill();
 			var str="Submit new content";
 			ctx.font = (text_size_px*.5)+"px Arial";	//draw smaller text
 			var text_width=ctx.measureText(str).width;
 			ctx.fillStyle = '#D0D0D0';
-			ctx.fillText(str,w*submit_btn_x+(w*submit_btn_w-text_width)/2,h*(submit_btn_y+submit_btn_h/2)+text_size_px/4);
+			ctx.fillText(str,w*submit_btn[0]+(w*submit_btn[1]-text_width)/2,h*(submit_btn[2]+submit_btn[3]/2)+text_size_px/4);
 		}
 	}else{
 		ctx.beginPath();
@@ -159,7 +161,31 @@ function draw_code(){
 		ctx.fillText(str,(w-text_width)/2,h*(0.95)+text_size_px/2);
 	}
 	
-	
+	if (a_valid_poem){
+		ctx.font = text_size_px+"px Arial";	//draw main text
+		var spa_w=ctx.measureText(" ").width;
+		var str="Like";
+		var text_width=ctx.measureText(str).width;
+		like_btn[0]=0.01+spa_w/w; 		//x
+		like_btn[1]=text_width/w; 		//w
+		like_btn[3]=text_size_px/w; 	//h
+		like_btn[2]=0.95-like_btn[3]/2; //y
+		ctx.fillStyle = '#80FF80';
+		ctx.fillText(str,w*like_btn[0],h*(like_btn[2]+like_btn[3]));
+		var str="or";
+		var text_width=ctx.measureText(str).width;
+		ctx.fillStyle = '#E0E0E0';
+		var or_pos=w*(like_btn[0]+like_btn[1])+spa_w;
+		ctx.fillText(str,or_pos,h*(like_btn[2]+like_btn[3]));
+		dislike_btn[0]=(or_pos+text_width+spa_w)/w; 		//x
+		var str="Dislike";
+		var text_width=ctx.measureText(str).width;
+		ctx.fillStyle = '#FF8080';
+		dislike_btn[1]=text_width/w;
+		dislike_btn[2]=like_btn[2];dislike_btn[3]=like_btn[3];
+		ctx.fillText(str,w*dislike_btn[0],h*(dislike_btn[2]+dislike_btn[3]));
+		
+	}
 	/*
 	//draw path
 	ctx.beginPath();
@@ -230,16 +256,23 @@ function check_word(x_pos,line){
 		last_pos_end=pos_end;
 	}	
 }
+function check_area(x,y,arr){
+	if (x>arr[0] && x<(arr[0]+arr[1])){	//x w
+		if (y>arr[2] && y<(arr[2]+arr[3])){	//y h
+			return true;
+		}
+	}else return false;
+}
 
 function start_trace(x,y){
 	var i;
 	//detect buttons;
 	var x_po=x/w;
 	var y_po=y/h;
-	if (x_po>submit_btn_x && x_po<(submit_btn_x+submit_btn_w)){
-		if (y_po>submit_btn_y && y_po<(submit_btn_y+submit_btn_h)){
-			window.location.href = "submit_content.html";
-		}
+	if (check_area(x_po,y_po,submit_btn)) window.location.href = "submit_content.html";
+	if (a_valid_poem){
+		if (check_area(x_po,y_po,like_btn)) {console.log("Like"); alert("Like will be implemented later")};
+		if (check_area(x_po,y_po,dislike_btn)) {console.log("Dislike"); alert("Disike will be implemented later")};
 	}
 	
 	for (i=0;i<8;i++){
@@ -279,11 +312,14 @@ function end_trace(x,y){
 		trace_enable=false;
 		console.log('up '+" "+ x +" "+ y );
 		var i;
+		var selected_lines=0;
 		for (i=0;i<8;i++){
-			if (line_disabled[i]) break;
-		}	
-		if (i<8){	
+			if (line_disabled[i]) selected_lines++;
+		}
+		if (selected_lines>0){	
+			if (selected_lines>=8) a_valid_poem=true;
 			setTimeout(function(){
+				a_valid_poem=false;
 				for (var i=0;i<8;i++){
 					line_disabled[i]=false;
 				}
