@@ -344,6 +344,9 @@ function ol() {
 	http.onreadystatechange = function() {//Call a function when the state changes.
 		if(http.readyState == 4 && http.status == 200) {
 			text_array_server=http.responseText.trim().split('\n');
+			for(var i=0; i<text_array_server.length; i++) {
+				 text_array_server[i]=text_array_server[i].trim()+" ";
+			}
 			if (text_array_server.length<16) alert("Load text ERR, please refresh");
 			setup_code();
 		}else if(http.status != 200){
