@@ -6,7 +6,7 @@
 - Inessah, Selditz, https://github.com/inessah
 
 ## Description
-Use a single slide to create a poem. Placeholder: Insert a description containing about 100 to 150 words, including your motivation and the meaning behind your idea and execution. The Judges will be keen to know how your idea pushes the boundaries of code and technology. 
+Use a single slide to create a poem. 
 
 ## Link to Prototype
 
@@ -27,8 +27,6 @@ procedure compute_g(i):
 [Example Link](http://www.google.com "Example Link")
 
 ## Images & Videos
-NOTE: For additional images you can either use a relative link to an image on this repo or an absolute link to an externally hosted image.
 
-![Example Image](project_images/cover.jpg?raw=true "Example Image")
+![Cover Image](project_images/cover.jpg?raw=true "Cover Image")
 
-https://www.youtube.com/watch?v=30yGOxJJ2PQ
