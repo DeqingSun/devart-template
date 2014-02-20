@@ -7,6 +7,7 @@ from google.appengine.ext import db
 import logging
 
 DEFAULT_CONTENT_NAME = 'default_CONTENT'
+POEM_CONTENT_NAME = 'default_CONTENT'
 def contents_key(contents_name=DEFAULT_CONTENT_NAME):
     """Constructs a Datastore key for a Contents entity with contents_name."""
     return db.Key.from_path('Plinko_contents', contents_name)
@@ -14,6 +15,11 @@ def contents_key(contents_name=DEFAULT_CONTENT_NAME):
 class Words_content(db.Model):
     time = db. DateTimeProperty(auto_now=True);
     content = db.StringProperty();
+
+class Poems_content(db.Model):
+    time = db. DateTimeProperty(auto_now=True);
+    content = db.StringProperty();
+    comment = db.StringProperty();
 
 class Recent_data(webapp2.RequestHandler):	#TODO: add cache
     def get(self):
@@ -59,6 +65,10 @@ class New_Poem(webapp2.RequestHandler):
             if (comment=="B"):
                 comment="BAD";
             self.response.write("A "+comment+" poem is:"+poem);
+            ct = Poems_content(parent=contents_key(POEM_CONTENT_NAME));	#put into database
+            ct.content = poem;
+            ct.comment = comment;
+            ct.put()
         else:
             self.response.write("Special characters are not allowed");
 
