@@ -290,6 +290,14 @@ function submit_a_poem(comment){
 		}
 	}
 	http.send(null);
+	
+	if (backout_removal!=null) {
+		clearTimeout(backout_removal);
+		backout_removal=null;
+	}
+	backout_removal=setTimeout(function(){
+		remove_blackout();
+	},3000);
 }
 
 function check_area(x,y,arr){
@@ -343,6 +351,7 @@ function move_trace(x,y){
 	}		
 }
 
+var backout_removal = null;
 function end_trace(x,y){
 	if (trace_enable){
 		trace_enable=false;
@@ -353,18 +362,25 @@ function end_trace(x,y){
 			if (line_disabled[i]) selected_lines++;
 		}
 		if (selected_lines>0){	
+			var blackout_time = 2000;
 			if (selected_lines>=8) {
 				a_valid_poem=true;
 				poem_score=0;
+				blackout_time=5000;
 			}
-			setTimeout(function(){
-				a_valid_poem=false;
-				for (var i=0;i<8;i++){
-					line_disabled[i]=false;
-				}
-			},3000);
+			backout_removal=setTimeout(function(){
+				remove_blackout();
+			},blackout_time);
 		}
 	}	
+}
+
+function remove_blackout(){
+	backout_removal=null;
+	a_valid_poem=false;
+	for (var i=0;i<8;i++){
+		line_disabled[i]=false;
+	}
 }
 
 function ol() {
