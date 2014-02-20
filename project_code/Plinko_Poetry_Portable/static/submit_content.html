@@ -5,8 +5,7 @@
 <title>Untitled Document</title>
 
 <script type="text/javascript">
-function submit_content()
-{
+function submit_content(){
 	var str = document.getElementById("content_Textarea").value;
 	var http = new XMLHttpRequest();
 	var url = "submit";
@@ -24,17 +23,49 @@ function submit_content()
 	http.send(null);
 }
 
+function get_poems(){
+	var http = new XMLHttpRequest();
+	var url = "recent_poems";
+	http.open("GET", url, true);
+	http.onreadystatechange = function() {//Call a function when the state changes.
+		if(http.readyState == 4 && http.status == 200) {
+			var poems = http.responseText.trim().split("\n");
+			var html_buf="";
+			for (var i=0;i<poems.length;i++){
+				var elements = poems[i].split("\t");
+				var style_str = "";
+				if (elements[0]=="GOOD"){
+					style_str = "style=\"color:#80FF80;\"";
+				}else if (elements[0]=="BAD"){
+					style_str = "style=\"color:#FF8080;\"";
+				}
+				html_buf=html_buf+"<div "+style_str+">"+elements[1]+"</div>\n";
+			}
+			document.getElementById("poems").innerHTML=html_buf;			
+		}
+	}
+	http.send(null);
+}
+
 </script>
 
 </head>
 
 <body>
+<p>Recent poems:</p>
+
+<div id="poems"></div>
+<script type="text/javascript">
+	get_poems();
+</script>
+
+<p>&nbsp;</p>
+
+<p>You can also submit new contents for poems.</p>
 <p>Please input between 60~200 characters</p>
 <div><textarea id="content_Textarea" name="content" rows="10" cols="60"></textarea></div>
 <button type="button" onclick="submit_content()">submit some new content</button>
 <p><a href=".">back</a></p>
-
-
 
 </body>
 </html>
