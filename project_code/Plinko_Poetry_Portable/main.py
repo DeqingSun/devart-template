@@ -8,9 +8,25 @@ import logging
 
 DEFAULT_CONTENT_NAME = 'default_CONTENT'
 POEM_CONTENT_NAME = 'default_CONTENT'
+
 def contents_key(contents_name=DEFAULT_CONTENT_NAME):
     """Constructs a Datastore key for a Contents entity with contents_name."""
     return db.Key.from_path('Plinko_contents', contents_name)
+
+def generate_recent_memcache(data_length):
+    q=Words_content.all().ancestor(contents_key(DEFAULT_CONTENT_NAME));
+    q.order("-time");
+    data=q.fetch(data_length)
+    if (len(data)<data_length):
+        data_length=len(data);
+    str_buf = "";
+    for i in range(0, data_length):
+        str_buf=str_buf+data[i].content;
+        if (i<data_length-1):
+            str_buf=str_buf+'\n';
+    memcache.set('recent_content', str_buf);
+    return data_length;
+
 
 class Words_content(db.Model):
     time = db. DateTimeProperty(auto_now=True);
@@ -21,17 +37,22 @@ class Poems_content(db.Model):
     content = db.StringProperty();
     comment = db.StringProperty();
 
-class Recent_data(webapp2.RequestHandler):	#TODO: add cache
+class Recent_data(webapp2.RequestHandler):
     def get(self):
         all_data_number=16;
         #get most recent item
-        q=Words_content.all().ancestor(contents_key(DEFAULT_CONTENT_NAME));
-        q.order("-time");
-        data=q.fetch(all_data_number)
+        memcache_recent=memcache.get('recent_content');
+        if memcache_recent is None:
+            generate_recent_memcache(all_data_number);
+            memcache_recent=memcache.get('recent_content');
+            #logging.info('fetch again')
+        
+        data = memcache_recent.split("\n");
+        
         self.response.headers['Content-Type'] = 'text/plain';
         for x in range(0, all_data_number):
             if (x<len(data)):
-                content=data[x].content;
+                content=data[x];
             else:
                 content="Lorem ipsum dolor sit amet, consectetur adipisicing elit. ";
             self.response.write(content);
@@ -60,7 +81,8 @@ class Submit_data(webapp2.RequestHandler):
                 self.response.write("OK.")
                 ct = Words_content(parent=contents_key(DEFAULT_CONTENT_NAME));	#put into database
                 ct.content = content;
-                ct.put()				
+                ct.put();
+                generate_recent_memcache(16);
             else:
                 self.response.write("Your " + str(str_len) + " characters context isn't between 60 to 200 characters")
         else:
