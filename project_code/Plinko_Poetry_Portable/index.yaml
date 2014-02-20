@@ -10,6 +10,12 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
+- kind: Poems_content
+  ancestor: yes
+  properties:
+  - name: time
+    direction: desc
+
 - kind: Words_content
   ancestor: yes
   properties:

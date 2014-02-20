@@ -36,6 +36,18 @@ class Recent_data(webapp2.RequestHandler):	#TODO: add cache
                 content="Lorem ipsum dolor sit amet, consectetur adipisicing elit. ";
             self.response.write(content);
             self.response.write("\n");
+
+class Recent_Poems(webapp2.RequestHandler):	#TODO: add cache
+    def get(self):
+        all_data_number=10;
+        #get most recent item     
+        q=Poems_content.all().ancestor(contents_key(POEM_CONTENT_NAME));
+        q.order("-time");
+        data=q.fetch(all_data_number)
+        self.response.headers['Content-Type'] = 'text/plain';
+        for i in range(0, len(data)):
+            self.response.write(data[i].comment + "\t" + data[i].content);
+            self.response.write("\n");
      
 
 class Submit_data(webapp2.RequestHandler):
@@ -77,4 +89,5 @@ application = webapp2.WSGIApplication([
     ('/submit', Submit_data),
     ('/recent', Recent_data),
     ('/new_poem', New_Poem),
+    ('/recent_poems', Recent_Poems),
 ], debug=True)
