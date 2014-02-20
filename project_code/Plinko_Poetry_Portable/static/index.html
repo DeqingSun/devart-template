@@ -9,7 +9,7 @@
 body { margin: 0px; overflow: hidden; }
 canvas { border: 0px ; }
 </style>
-
+<script src="js/animation.js"></script>
 <script type="text/javascript">
 
 var canvas;
@@ -24,6 +24,7 @@ var trace_y=[];
 var blackout_l=[];
 var blackout_r=[];
 var words_selected=[];
+var words_selected_pos=[];
 
 
 var line_disabled=[];
@@ -140,19 +141,6 @@ function draw_code(){
 			var text_width=ctx.measureText(str).width;
 			ctx.fillStyle = '#E0E0E0';
 			ctx.fillText(str,(w-text_width)/2,h*(0.15/2)+text_size_px/2);
-			//draw submit new content
-			ctx.beginPath();	//draw "Press and hold in this area"
-			ctx.rect(w*submit_btn[0], h*submit_btn[2], w*submit_btn[1], h*submit_btn[3]);
-			ctx.fillStyle = '#f0f0f0';
-			ctx.fill();
-			var str="Access";
-			ctx.font = (text_size_px*.5)+"px Arial";	//draw smaller text
-			var text_width=ctx.measureText(str).width;
-			ctx.fillStyle = '#D0D0D0';
-			ctx.fillText(str,w*submit_btn[0]+(w*submit_btn[1]-text_width)/2,h*(submit_btn[2]+submit_btn[3]/2)+(-0.5)*text_size_px/4);
-			var str="Poems";
-			var text_width=ctx.measureText(str).width;
-			ctx.fillText(str,w*submit_btn[0]+(w*submit_btn[1]-text_width)/2,h*(submit_btn[2]+submit_btn[3]/2)+(2.5)*text_size_px/4);
 		}
 	}else{
 		ctx.beginPath();
@@ -196,14 +184,37 @@ function draw_code(){
 				var str="+1";
 				ctx.fillStyle = '#80FF80';
 				ctx.fillText(str,w*like_btn[0],h*(like_btn[2]+like_btn[3]));
+				
+				if(!draw_positive_animation(frame_ptr++)){
+					remove_blackout();//start again
+				}
 			}else{
 				var str="-1";
 				ctx.fillStyle = '#FF8080';
 				ctx.fillText(str,w*dislike_btn[0],h*(dislike_btn[2]+dislike_btn[3]));
+				
+				remove_blackout();
 			}
 		}
 		
 	}
+	
+	if (!trace_enable){
+		//draw submit new content
+		ctx.beginPath();	//draw background square
+		ctx.rect(w*submit_btn[0], h*submit_btn[2], w*submit_btn[1], h*submit_btn[3]);
+		ctx.fillStyle = '#f0f0f0';
+		ctx.fill();
+		var str="Access";
+		ctx.font = (text_size_px*.5)+"px Arial";	//draw smaller text
+		var text_width=ctx.measureText(str).width;
+		ctx.fillStyle = '#D0D0D0';
+		ctx.fillText(str,w*submit_btn[0]+(w*submit_btn[1]-text_width)/2,h*(submit_btn[2]+submit_btn[3]/2)+(-0.5)*text_size_px/4);
+		var str="Poems";
+		var text_width=ctx.measureText(str).width;
+		ctx.fillText(str,w*submit_btn[0]+(w*submit_btn[1]-text_width)/2,h*(submit_btn[2]+submit_btn[3]/2)+(2.5)*text_size_px/4);
+	}
+	
 	/*
 	//draw path
 	ctx.beginPath();
@@ -254,6 +265,9 @@ function check_word(x_pos,line){
 		if (last_pos_end<=x_pos && pos_end>=x_pos){
 			var selected_word = str.substring(last_ptr,ptr);
 			words_selected[line]=selected_word.trim();
+			var leading_space=0;
+			while(selected_word.charAt(leading_space)==' ') leading_space++;
+			words_selected_pos[line]=last_pos_end+leading_space*space_width;
 			blackout_l[line]=last_pos_end;
 			blackout_r[line]=pos_end;
 			
@@ -295,9 +309,8 @@ function submit_a_poem(comment){
 		clearTimeout(backout_removal);
 		backout_removal=null;
 	}
-	backout_removal=setTimeout(function(){
-		remove_blackout();
-	},3000);
+	frame_ptr=0;
+	
 }
 
 function check_area(x,y,arr){
@@ -313,7 +326,7 @@ function start_trace(x,y){
 	//detect buttons;
 	var x_po=x/w;
 	var y_po=y/h;
-	if (check_area(x_po,y_po,submit_btn)) window.location.href = "submit_content.html";
+	if (!trace_enable && check_area(x_po,y_po,submit_btn)) window.location.href = "submit_content.html";
 	if (a_valid_poem && poem_score==0){
 		if (check_area(x_po,y_po,like_btn)) {submit_a_poem('G'); poem_score=1};
 		if (check_area(x_po,y_po,dislike_btn)) {submit_a_poem('B'); poem_score=-1};
