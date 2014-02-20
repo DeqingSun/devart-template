@@ -10,7 +10,7 @@ Use a single slide to create a poem.
 
 ## Link to Prototype
 
-[Working Prototype](http://plinko-poetry.appspot.com "Plinko Poetry Portable")
+[Working Prototype](http://plinko-poetry.appspot.com "Plinko Poetry Portable") | *Portrait orientation recommended.*
 
 ## Example Code
 NOTE: Wrap your code blocks or any code citation by using ``` like the example below.
