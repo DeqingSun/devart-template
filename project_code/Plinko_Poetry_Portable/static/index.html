@@ -145,11 +145,14 @@ function draw_code(){
 			ctx.rect(w*submit_btn[0], h*submit_btn[2], w*submit_btn[1], h*submit_btn[3]);
 			ctx.fillStyle = '#f0f0f0';
 			ctx.fill();
-			var str="Submit new content";
+			var str="Access";
 			ctx.font = (text_size_px*.5)+"px Arial";	//draw smaller text
 			var text_width=ctx.measureText(str).width;
 			ctx.fillStyle = '#D0D0D0';
-			ctx.fillText(str,w*submit_btn[0]+(w*submit_btn[1]-text_width)/2,h*(submit_btn[2]+submit_btn[3]/2)+text_size_px/4);
+			ctx.fillText(str,w*submit_btn[0]+(w*submit_btn[1]-text_width)/2,h*(submit_btn[2]+submit_btn[3]/2)+(-0.5)*text_size_px/4);
+			var str="Poems";
+			var text_width=ctx.measureText(str).width;
+			ctx.fillText(str,w*submit_btn[0]+(w*submit_btn[1]-text_width)/2,h*(submit_btn[2]+submit_btn[3]/2)+(2.5)*text_size_px/4);
 		}
 	}else{
 		ctx.beginPath();
