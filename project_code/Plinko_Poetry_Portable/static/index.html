@@ -423,6 +423,7 @@ function ol() {
 				 text_array_server[i]=text_array_server[i].trim()+" ";
 			}
 			if (text_array_server.length<16) alert("Load text ERR, please refresh");
+			resize_canvas();
 			setup_code();
 		}else if(http.status != 200){
 			console.log("LOAD!FAIL!" + http.readyState+" " + http.status);
