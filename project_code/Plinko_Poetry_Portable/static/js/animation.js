@@ -12,8 +12,9 @@ function map_range_2(value, low1, high1, low2, high2) {
     return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
 }
 
-var posi_frames=80;
 var frame_ptr=0;
+
+var posi_frames=80;
 var mw_dist_x_pos=[];
 function draw_positive_animation(ptr){
 	var fade_out_frm=10;var move_frm=40;var move_down_frm=70;
@@ -72,6 +73,52 @@ function draw_positive_animation(ptr){
 	}
 	
 	if (ptr>posi_frames){
+		return false;	
+	}else{
+		return true;	
+	}
+}
+
+var nega_frames=50;
+var mw_dist_x_pos=[];
+function draw_negative_animation(ptr){
+	var black_all_frm=10;var break_1_frm=20;var fade_out_frm=30;var break_2_frm=40;
+	
+	if (ptr < fade_out_frm){
+		var ptr2 = ptr;
+		if (ptr>=black_all_frm) ptr2=black_all_frm;
+		for (var i=0;i<8;i++){
+			var width_black = map_range_2(ptr2,0,(black_all_frm-1),0,blackout_r[i]-blackout_l[i]+w*0.01);
+			ctx.beginPath();
+			ctx.rect(blackout_l[i]-w*0.005, text_pos_y[i], width_black, -text_size_px);
+			ctx.fillStyle = 'black';
+			ctx.fill();
+		}
+		if (ptr>=break_1_frm){
+			var width_white = map_range_2(ptr,break_1_frm,(fade_out_frm-1),0,w);
+			ctx.beginPath();
+			ctx.rect(0, text_pos_y[7]+text_size_px*0.1, width_white, text_pos_y[0]-text_size_px*(1.2)-text_pos_y[7]);
+			ctx.fillStyle = 'white';
+			ctx.fill();
+			if (ptr==fade_out_frm-1){
+				for (var i=0;i<8;i++){	//force erase black strips
+					blackout_l[i]=0;
+					blackout_r[i]=w;
+				}
+			}
+		}
+	}else{
+		var alpha_all=1-((ptr-break_2_frm)/(nega_frames-break_2_frm+1));
+		if (alpha_all>1) alpha_all=1;
+		ctx.beginPath();
+		ctx.rect(0, text_pos_y[7]+text_size_px*0.1, w, text_pos_y[0]-text_size_px*(1.2)-text_pos_y[7]);
+		ctx.fillStyle = 'rgba(255,255,255,'+alpha_all+');';
+		ctx.fill();
+		
+	}
+	
+	
+	if (ptr>nega_frames){
 		return false;	
 	}else{
 		return true;	

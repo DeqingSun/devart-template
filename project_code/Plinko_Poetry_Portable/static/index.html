@@ -193,7 +193,9 @@ function draw_code(){
 				ctx.fillStyle = '#FF8080';
 				ctx.fillText(str,w*dislike_btn[0],h*(dislike_btn[2]+dislike_btn[3]));
 				
-				remove_blackout();
+				if(!draw_negative_animation(frame_ptr++)){
+					remove_blackout();//start again
+				}
 			}
 		}
 		
