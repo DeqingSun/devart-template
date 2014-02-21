@@ -12,6 +12,8 @@ Use a single slide to create a poem.
 
 [Working Prototype](http://plinko-poetry.appspot.com "Plinko Poetry Portable") | *Portrait orientation recommended.*
 
+[Poems Generated on G+](https://plus.google.com/u/0/b/116741454137931212122/) 
+
 ## Example Code
 NOTE: Wrap your code blocks or any code citation by using ``` like the example below.
 ```
