@@ -10,9 +10,10 @@ body { margin: 0px; overflow: hidden; }
 canvas { border: 0px ; }
 </style>
 <script src="js/animation.js"></script>
+<script src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">
 
-var canvas;
+var canvas,google_imgs;
 var ctx;
 var w = 0;
 var h = 0;
@@ -400,6 +401,7 @@ function remove_blackout(){
 
 function ol() {
 	canvas = document.getElementById('canvas');
+	google_imgs = document.getElementById('google_img_div');
 	ctx = canvas.getContext('2d');
 
 	canvas.addEventListener('touchend', function(event) {
@@ -477,5 +479,9 @@ function ol() {
 <body>
 <canvas id="canvas" width="300" height="300" style="top:0px; left:0px; width: 300px; height: 300px;">Your browser does not support the HTML5 canvas tag.
 </canvas>
+
+<div id="google_img_div" style="position: absolute; left: 0; top: 0; display: none;">
+</div>
+
 </body>
 </html>
