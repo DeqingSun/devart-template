@@ -16,7 +16,22 @@ var frame_ptr=0;
 
 var posi_frames=110;
 var mw_dist_x_pos=[];
+var imageSearch=[];
 function draw_positive_animation(ptr){
+	if (ptr==0){	//fetch google images
+		google_imgs.innerHTML = '';
+		for (var i=0;i<8;i++){
+			// Create an Image Search instance.
+			imageSearch[i] = new google.search.ImageSearch();
+			// Set searchComplete as the callback function when a search is 
+			// complete.  The imageSearch object will have results in it.
+			imageSearch[i].setSearchCompleteCallback(this, searchComplete, [i]);		
+			// Find me a beautiful car.
+			imageSearch[i].execute(words_selected[i]);
+		}	
+	}
+	
+	
 	var fade_out_frm=10;var move_frm=40;var idle_frm=70;var move_down_frm=100;
 	if (ptr < fade_out_frm){
 		var color_value=Math.round(255*ptr/(fade_out_frm-1));
@@ -135,5 +150,22 @@ function draw_negative_animation(ptr){
 		return false;	
 	}else{
 		return true;	
+	}
+}
+
+function searchComplete(value) {
+// Check that we got results
+	if (imageSearch[value].results && imageSearch[value].results.length > 0) {
+		// Loop through our results, printing them to the page.
+		var results = imageSearch[value].results;
+		var i = Math.floor((Math.random()*results.length));
+		// For each result write it's title and image to the screen
+		var result = results[i];
+		//var imgContainer = google_imgs.createElement('div');
+		var newImg = document.createElement('img');
+		
+		newImg.src=result.tbUrl;
+		google_imgs.appendChild(newImg);
+	
 	}
 }
