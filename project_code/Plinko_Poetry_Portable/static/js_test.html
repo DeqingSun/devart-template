@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>Google Search API Sample</title>
+    <script src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+
+      google.load('search', '1');
+
+      var imageSearch=[];
+
+
+      function searchComplete(value) {
+	
+
+        // Check that we got results
+        if (imageSearch[value].results && imageSearch[value].results.length > 0) {
+
+
+				 console.log(value + " ");
+
+          // Grab our content div, clear it.
+          var contentDiv = document.getElementById('content');
+          //contentDiv.innerHTML = '';
+
+          // Loop through our results, printing them to the page.
+          var results = imageSearch[value].results;
+          var i = Math.floor((Math.random()*results.length));
+            // For each result write it's title and image to the screen
+			var result = results[i];
+			var imgContainer = document.createElement('div');
+			var title = document.createElement('div');
+			
+			// We use titleNoFormatting so that no HTML tags are left in the 
+			// title
+			title.innerHTML = result.titleNoFormatting;
+			var newImg = document.createElement('img');
+	
+			// There is also a result.url property which has the escaped version
+			newImg.src=result.tbUrl;
+			imgContainer.appendChild(title);
+			imgContainer.appendChild(newImg);
+	
+			// Put our title + image in the content
+			contentDiv.appendChild(imgContainer);
+          
+
+          // Now add links to additional pages of search results.
+          //addPaginationLinks(imageSearch);
+        }
+      }
+
+      function OnLoad() {
+		var strs="Gone To Technology Housekeeper A Dwight hedgehog LONDON".split(" ");
+		for (var i=0;i<8;i++){
+      
+			// Create an Image Search instance.
+			imageSearch[i] = new google.search.ImageSearch();
+	
+			// Set searchComplete as the callback function when a search is 
+			// complete.  The imageSearch object will have results in it.
+			imageSearch[i].setSearchCompleteCallback(this, searchComplete, [i]);
+	
+			// Find me a beautiful car.
+			imageSearch[i].execute(strs[i]);
+			console.log("searching "+strs[i]);
+		}
+		
+		//google.search.Search.getBranding('branding');
+        
+      }
+      google.setOnLoadCallback(OnLoad);
+    </script>
+
+  </head>
+  <body style="font-family: Arial;border: 0 none;">
+    <div id="branding"  style="float: left;"></div><br />
+    <div id="content">Loading...</div>
+  </body>
+</html>
