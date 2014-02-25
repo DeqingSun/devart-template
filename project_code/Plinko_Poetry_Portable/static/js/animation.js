@@ -14,7 +14,7 @@ function map_range_2(value, low1, high1, low2, high2) {
 
 var frame_ptr=0;
 var a_new_img_loaded=false;
-var posi_frames=110;
+var posi_frames=200;
 var mw_dist_x_pos=[];
 var imageSearch=[];
 function draw_positive_animation(ptr){
@@ -42,7 +42,7 @@ function draw_positive_animation(ptr){
 	}
 	
 	
-	var fade_out_frm=10;var move_frm=40;var idle_frm=70;var move_down_frm=100;
+	var fade_out_frm=10;var move_frm=40;var idle_frm=160;var move_down_frm=190;
 	if (ptr < fade_out_frm){
 		var color_value=Math.round(255*ptr/(fade_out_frm-1));
 		for (var i=0;i<8;i++){
