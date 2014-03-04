@@ -1,5 +1,17 @@
-Insert a description to describe your update to document your creative process. The Commissioned Interactive Artists will be doing the same so you can reference their Project Posts.
+We're excited to start this process and starting to piece together how we're going to execute over the next few weeks. Some initial starting points:
 
-![Example Image](../project_images/cover_init.jpg?raw=true "Example Image")
+Some ideas we want to explore
+-Collaborative creation
+-Aleatoric processes in art
+-Subverting traditional media 
+-Decontextualization
 
-https://www.youtube.com/watch?v=30yGOxJJ2PQ
+References
+-Exquisite corpse
+-Blackout poetry
+-Price is Right
+-Parlor Games
+-Jenny Holzer 
+-Fluxus
+
+

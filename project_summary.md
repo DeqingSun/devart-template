@@ -1,4 +1,4 @@
-# Plinko Poetry Portable
+# Plinko Poetry 
 
 
 ## Authors
@@ -6,7 +6,7 @@
 - Inessah, Selditz, https://github.com/inessah
 
 ## Description
-Use a single slide to create a poem. 
+
 
 ## Link to Prototype
 
