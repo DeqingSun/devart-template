@@ -14,9 +14,15 @@ function map_range_2(value, low1, high1, low2, high2) {
 
 var frame_ptr=0;
 var a_new_img_loaded=false;
-var posi_frames=200;
+var posi_frames=250;
 var mw_dist_x_pos=[];
 var imageSearch=[];
+var google_images_loaded=[];
+var display_kaleidoscope=false;
+var k_canvas,k_ctx;
+var small_canvas,small_ctx;
+
+
 function draw_positive_animation(ptr){
 	if (ptr==0){	//fetch google images
 		google_imgs.innerHTML = '';
@@ -28,7 +34,17 @@ function draw_positive_animation(ptr){
 			imageSearch[i].setSearchCompleteCallback(this, searchComplete, [i]);		
 			// Find me a beautiful car.
 			imageSearch[i].execute(words_selected[i]);
+			google_images_loaded[i]=false;
 		}	
+		display_kaleidoscope=false;
+		k_canvas=document.getElementById("tempCanvas4Kaleidoscope");
+		k_canvas.width=w;
+		k_canvas.height=h;
+		k_ctx=k_canvas.getContext("2d");
+		k_ctx.clearRect(0,0,w,h);
+		
+		small_canvas=document.getElementById("tempCanvas4SmallImg");
+		small_ctx=small_canvas.getContext("2d");
 		
 		//calculate something in 1st frame
 		var widest = 0;
@@ -42,7 +58,7 @@ function draw_positive_animation(ptr){
 	}
 	
 	
-	var fade_out_frm=10;var move_frm=40;var idle_frm=160;var move_down_frm=190;
+	var fade_out_frm=10;var move_frm=40;var idle_frm=210;var move_down_frm=240;
 	if (ptr < fade_out_frm){
 		var color_value=Math.round(255*ptr/(fade_out_frm-1));
 		for (var i=0;i<8;i++){
@@ -88,7 +104,7 @@ function draw_positive_animation(ptr){
 		}else{	//idle
 			
 			if (ptr==move_frm){
-				google_imgs.style.display='inline';
+				//google_imgs.style.display='inline';
 			}else{
 				if (a_new_img_loaded){	//give more time
 					a_new_img_loaded=false;
@@ -96,9 +112,16 @@ function draw_positive_animation(ptr){
 				}
 			}
 		
+			if (display_kaleidoscope) {
+				
+				ctx.drawImage(k_canvas,0,0);
+			}
+		
 			for (var i=0;i<8;i++){
 				ctx.fillText(words_selected[i],mw_dist_x_pos[i],text_pos_y[i]);			
 			}
+			
+			
 		}
 	}else{
 		var alpha_all=1-((ptr-move_down_frm)/(posi_frames-move_down_frm+1));
@@ -160,6 +183,84 @@ function draw_negative_animation(ptr){
 	}
 }
 
+function kaleidoscope_fill(img,x,y,x1,ctx,w,h){
+	var sqrt3=Math.sqrt(3);
+	var small_w=x1-x;
+	var small_h=Math.ceil(small_w*0.5*sqrt3);
+	var x_num=Math.ceil(w/small_w)+1;
+	var y_num=Math.ceil((h+small_h/3)/small_h)*2;
+	
+	for (var j=0;j<y_num;j++){
+		var x_offset;
+		if ((j%4)==0 || (j%4)==3) x_offset=0;
+		else x_offset=small_w*0.5;
+		var y_pos=(Math.floor(j/2)*3+(j%2))*small_h/3;
+		for (var i=0;i<x_num;i++){
+			ctx.save();
+			ctx.translate(i*small_w+x_offset,y_pos);
+			var rotate_angle=(Math.floor(j*0.25))*(Math.PI*2/3);		
+			if (j&1!=0){	//odd row
+				rotate_angle-=(i+j)*(Math.PI*2/3);
+				if (((j&3)==1))  rotate_angle-=(Math.PI*2/3);;
+				rotate_angle+=Math.PI;
+				ctx.scale(-1,1);
+			}else{	//even row
+				rotate_angle-=(i+j)*(Math.PI*2/3);
+			}
+			ctx.rotate(rotate_angle);
+			
+			ctx.beginPath();
+    		ctx.moveTo(-small_w*0.5,-small_h/3);
+			ctx.lineTo(small_w*0.5,-small_h/3);
+			ctx.lineTo(0,2*small_h/3);
+			ctx.closePath();
+			
+			ctx.clip();
+			ctx.drawImage(img,-small_w*0.5,-small_h/3);
+			ctx.restore();
+		}	
+	}
+}
+
+function google_images_loaded_func(value){			
+	google_images_loaded[value]=true;
+	if (!display_kaleidoscope){
+		var images_arr=[];
+		var smallest_w=99999;
+		var smallest_h=99999;
+		for (var i=0;i<8;i++){
+			if (google_images_loaded[i]) {
+				var img=document.getElementById("google_image_"+i);
+				images_arr.push(img);
+				if (smallest_w>img.width) smallest_w=img.width;
+				if (smallest_h>img.height) smallest_h=img.height;
+			}
+		}
+		if (images_arr.length>=5) {
+			small_canvas.width=smallest_w;
+			small_canvas.height=smallest_h;
+			
+			small_ctx.globalAlpha = 1.5/images_arr.length;
+			var blend_arr=[];
+			var imgData,data_arr;
+			for (var i=0;i<images_arr.length;i++){
+				var x=((smallest_w-images_arr[i].width)*0.5);
+				var y=((smallest_h-images_arr[i].height)*0.5);
+				small_ctx.drawImage(images_arr[i],x,y);
+			}
+			small_ctx.globalAlpha = 1.0;
+			var tri_w;
+			if (smallest_w*0.5*Math.sqrt(3)<smallest_h) tri_w=smallest_w;
+			else tri_w=smallest_h*2/Math.sqrt(3);
+			
+			kaleidoscope_fill(small_canvas,0,0,tri_w,k_ctx,w,h);
+			document.getElementById("scream");
+			display_kaleidoscope=true;
+		}
+	}
+	//console.log("IMG loaded: "+value);
+}
+
 function searchComplete(value) {
 // Check that we got results
 	if (imageSearch[value].results && imageSearch[value].results.length > 0) {
@@ -170,15 +271,17 @@ function searchComplete(value) {
 		var result = results[i];
 		//var imgContainer = google_imgs.createElement('div');
 		var newImg = document.createElement('img');
-		newImg.style.position = 'absolute';
-		newImg.height = (text_pos_y[2]-text_pos_y[1])*1;
+		newImg.id = "google_image_"+value;
+		newImg.onload = function(){google_images_loaded_func(value)};
+		/*newImg.style.position = 'absolute';
+		//newImg.height = (text_pos_y[2]-text_pos_y[1])*1;
 		if (value%2==0){
 			newImg.style.left = (mw_dist_x_pos[value]-w*0.3)+'px';
 		}else{
 			newImg.style.left = (mw_dist_x_pos[value]-w*0.18)+'px';
 		}
 		//console.log((mw_dist_x_pos[value]-img_width)+'px');
-		newImg.style.top = (text_pos_y[value]-(text_pos_y[2]-text_pos_y[1])) + 'px';
+		newImg.style.top = (text_pos_y[value]-(text_pos_y[2]-text_pos_y[1])) + 'px';*/
 		newImg.src=result.tbUrl;
 		google_imgs.appendChild(newImg);
 		
