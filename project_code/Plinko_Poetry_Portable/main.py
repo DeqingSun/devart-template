@@ -4,6 +4,10 @@ import re
 from google.appengine.api import memcache
 from google.appengine.ext import ndb
 from google.appengine.ext import db
+
+from google.appengine.api import urlfetch
+from xml.etree import ElementTree as etree
+
 import logging
 
 DEFAULT_CONTENT_NAME = 'default_CONTENT'
@@ -27,6 +31,29 @@ def generate_recent_memcache(data_length):
     memcache.set('recent_content', str_buf);
     return data_length;
 
+def fetch_data_news(data_length):
+    url = "http://news.google.com/?output=rss&num="+str(data_length*2);
+    result = urlfetch.fetch(url);
+    if result.status_code == 200:
+        root = etree.fromstring(result.content);
+        str_buf = "";
+        count=0;
+        for item in root.findall('./channel/item/title'):
+            title=item.text;
+            pos=title.find("-");
+            if (pos>=0) :
+                title = title[:pos];
+            title=title.strip();
+            if (len(title)<40): #skip short title
+                continue;
+            str_buf=str_buf+title+'\n';
+            count=count+1;
+            if (count>=16):
+                break;
+        str_buf=str_buf.strip();
+        memcache.set('recent_content',str_buf);
+        return str_buf;
+    return None;
 
 class Words_content(db.Model):
     time = db. DateTimeProperty(auto_now=True);
@@ -43,7 +70,7 @@ class Recent_data(webapp2.RequestHandler):
         #get most recent item
         memcache_recent=memcache.get('recent_content');
         if memcache_recent is None:
-            generate_recent_memcache(all_data_number);
+            fetch_data_news(all_data_number);
             memcache_recent=memcache.get('recent_content');
             #logging.info('fetch again')
         
@@ -106,10 +133,21 @@ class New_Poem(webapp2.RequestHandler):
         else:
             self.response.write("Special characters are not allowed");
 
+class Fetch_data(webapp2.RequestHandler):	#TODO: add cache
+    def get(self):
+        self.response.headers['Content-Type'] = 'text/plain';
+        self.response.write("FETCH\n");
+        res=fetch_data_news(16);
+        if (res!=None):
+            self.response.write(res);
+        else:
+            self.response.write("FAIL");
+        
 
 application = webapp2.WSGIApplication([
     ('/submit', Submit_data),
     ('/recent', Recent_data),
     ('/new_poem', New_Poem),
     ('/recent_poems', Recent_Poems),
+    ('/fetch_data', Fetch_data),
 ], debug=True)
