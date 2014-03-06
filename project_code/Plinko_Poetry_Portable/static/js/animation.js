@@ -109,17 +109,30 @@ function draw_positive_animation(ptr){
 					ptr=move_frm
 				}
 			}
-		
+			var phase=1;
 			if (display_kaleidoscope) {
 				if (ptr<k_fadein) {
-					ctx.globalAlpha=map_range(ptr, move_frm, k_fadein, 0, 1);
+					phase=map_range(ptr, move_frm, k_fadein, 0, 1)
+					ctx.globalAlpha=phase;
 				}else if (ptr>=k_fadeout){
-					ctx.globalAlpha=map_range(ptr, idle_frm, k_fadeout, 0, 1);
+					phase=map_range(ptr, idle_frm, k_fadeout, 0, 1);
+					ctx.globalAlpha=phase;
 				}
 				ctx.drawImage(k_canvas,0,0);
 				ctx.globalAlpha=1.0;
 			}
-		
+			
+			if (display_kaleidoscope && ptr<idle_frm && ptr>=move_frm){
+				ctx.fillStyle = "rgba(0, 0, 0, "+phase*0.3+")";
+				ctx.beginPath();
+				ctx.rect(w,0,-(w-(mw_dist_x_pos[0]-0.05*w)),h);
+				ctx.fill();
+				var grey = Math.round(phase*255);
+				ctx.fillStyle = "rgb("+grey+","+grey+","+grey+")";
+			}else{
+				ctx.fillStyle = "black"
+			}
+			
 			for (var i=0;i<8;i++){
 				ctx.fillText(words_selected[i],mw_dist_x_pos[i],text_pos_y[i]);			
 			}
