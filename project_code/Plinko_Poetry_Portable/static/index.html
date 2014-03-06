@@ -158,7 +158,10 @@ function draw_code(){
 	}
 	
 	if (a_valid_poem){
-		if (poem_score==0){
+		if(!draw_positive_animation(frame_ptr++)){
+			remove_blackout();//start again
+		}
+		/*if (poem_score==0){
 			ctx.font = text_size_px+"px Arial";	//draw main text
 			var spa_w=ctx.measureText(" ").width;
 			var str="Like";
@@ -200,7 +203,7 @@ function draw_code(){
 					remove_blackout();//start again
 				}
 			}
-		}
+		}*/
 		
 	}
 	
@@ -385,10 +388,17 @@ function end_trace(x,y){
 				a_valid_poem=true;
 				poem_score=0;
 				blackout_time=5000;
+				
+				if (backout_removal!=null) {
+					clearTimeout(backout_removal);
+					backout_removal=null;
+				}
+				frame_ptr=0;
+			}else{
+				backout_removal=setTimeout(function(){
+					remove_blackout();
+				},blackout_time);
 			}
-			backout_removal=setTimeout(function(){
-				remove_blackout();
-			},blackout_time);
 		}
 	}	
 }
