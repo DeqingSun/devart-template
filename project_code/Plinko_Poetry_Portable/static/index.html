@@ -204,7 +204,7 @@ function draw_code(){
 		
 	}
 	
-	if (!trace_enable){
+	if (!trace_enable && !a_valid_poem){
 		//draw submit new content
 		ctx.beginPath();	//draw background square
 		ctx.rect(w*submit_btn[0], h*submit_btn[2], w*submit_btn[1], h*submit_btn[3]);
