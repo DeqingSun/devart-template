@@ -136,6 +136,19 @@ function draw_positive_animation(ptr){
 			for (var i=0;i<8;i++){
 				ctx.fillText(words_selected[i],mw_dist_x_pos[i],text_pos_y[i]);			
 			}
+			
+			if (display_kaleidoscope && ptr==k_fadeout-1){
+				var url=null;
+				try{
+					url = canvas.toDataURL('image/jpeg');
+				}catch(err){
+					console.log("Browser with CORS protection will not upload to gallery. Sorry.");
+				}
+				if (url!=null){
+					//upload it to server
+				}
+				
+			}
 
 		}
 	}else{

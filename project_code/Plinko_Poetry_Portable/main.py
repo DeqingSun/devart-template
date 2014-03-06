@@ -63,6 +63,7 @@ class Poems_content(db.Model):
     time = db. DateTimeProperty(auto_now=True);
     content = db.StringProperty();
     comment = db.StringProperty();
+    poster = db.BlobProperty();
 
 class Recent_data(webapp2.RequestHandler):
     def get(self):
