@@ -242,10 +242,11 @@ function google_images_loaded_func(value){
 			small_canvas.width=smallest_w;
 			small_canvas.height=smallest_h;
 			
-			small_ctx.globalAlpha = 1.5/images_arr.length;
+			//small_ctx.globalAlpha = 1.5/images_arr.length;
 			var blend_arr=[];
 			var imgData,data_arr;
 			for (var i=0;i<images_arr.length;i++){
+				small_ctx.globalAlpha = 1/i;
 				var x=((smallest_w-images_arr[i].width)*0.5);
 				var y=((smallest_h-images_arr[i].height)*0.5);
 				small_ctx.drawImage(images_arr[i],x,y);
