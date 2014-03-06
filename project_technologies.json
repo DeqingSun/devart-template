@@ -1,7 +1,8 @@
 {
     "technologies": {
         "apis": [
-            "insert apis"
+            "Google Image",
+            "Google News",
         ],
         "platforms": [
             "Google App Engine"
