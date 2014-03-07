@@ -137,7 +137,8 @@ function draw_positive_animation(ptr){
 				ctx.fillText(words_selected[i],mw_dist_x_pos[i],text_pos_y[i]);			
 			}
 			
-			if (display_kaleidoscope && ptr==k_fadeout-1){
+			//if (display_kaleidoscope && ptr==k_fadeout-1){
+			if (display_kaleidoscope && ptr==k_fadein+1){	//change it back after test
 				var url=null;
 				try{
 					url = canvas.toDataURL('image/jpeg');
@@ -145,6 +146,16 @@ function draw_positive_animation(ptr){
 					console.log("Browser with CORS protection will not upload to gallery. Sorry.");
 				}
 				if (url!=null){
+					var upload = new XMLHttpRequest();
+					upload.open('POST', 'upload_poster', false);
+					upload.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+					upload.onreadystatechange = function() {
+						if(upload.readyState == 4 && upload.status == 200) {
+							console.log(upload.responseText);
+						}
+					}
+					var encoded_poem=btoa(words_selected.join(' '));
+					upload.send("poem="+encoded_poem+"&"+"imgData="+url);
 					//upload it to server
 				}
 				

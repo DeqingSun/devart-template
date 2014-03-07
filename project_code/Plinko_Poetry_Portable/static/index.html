@@ -334,11 +334,11 @@ function start_trace(x,y){
 	//detect buttons;
 	var x_po=x/w;
 	var y_po=y/h;
-	if (!trace_enable && check_area(x_po,y_po,submit_btn)) window.location.href = "submit_content.html";
-	if (a_valid_poem && poem_score==0){
-		if (check_area(x_po,y_po,like_btn)) {submit_a_poem('G'); poem_score=1};
-		if (check_area(x_po,y_po,dislike_btn)) {submit_a_poem('B'); poem_score=-1};
-	}
+	if (!trace_enable && check_area(x_po,y_po,submit_btn) && !a_valid_poem) window.location.href = "submit_content.html";
+	//if (a_valid_poem && poem_score==0){
+		//if (check_area(x_po,y_po,like_btn)) {submit_a_poem('G'); poem_score=1};
+		//if (check_area(x_po,y_po,dislike_btn)) {submit_a_poem('B'); poem_score=-1};
+	//}
 	
 	for (i=0;i<8;i++){
 		if (line_disabled[i]) break;

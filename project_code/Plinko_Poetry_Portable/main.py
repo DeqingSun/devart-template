@@ -8,6 +8,8 @@ from google.appengine.ext import db
 from google.appengine.api import urlfetch
 from xml.etree import ElementTree as etree
 
+import re 
+import base64
 import logging
 
 DEFAULT_CONTENT_NAME = 'default_CONTENT'
@@ -134,7 +136,7 @@ class New_Poem(webapp2.RequestHandler):
         else:
             self.response.write("Special characters are not allowed");
 
-class Fetch_data(webapp2.RequestHandler):	#TODO: add cache
+class Fetch_data(webapp2.RequestHandler):   
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain';
         self.response.write("FETCH\n");
@@ -143,7 +145,16 @@ class Fetch_data(webapp2.RequestHandler):	#TODO: add cache
             self.response.write(res);
         else:
             self.response.write("FAIL");
-        
+
+class Upload_poster(webapp2.RequestHandler):
+    dataUrlPattern = re.compile('data:image/(png|jpeg);base64,(.*)$');
+    def post(self):
+        self.response.headers['Content-Type'] = 'text/plain';
+        self.response.write("Upload OK\n");
+        poem = base64.b64decode(self.request.get('poem'));
+        imgData = self.request.get('imgData');
+        self.response.write(poem);
+
 
 application = webapp2.WSGIApplication([
     ('/submit', Submit_data),
@@ -151,4 +162,5 @@ application = webapp2.WSGIApplication([
     ('/new_poem', New_Poem),
     ('/recent_poems', Recent_Poems),
     ('/fetch_data', Fetch_data),
+    ('/upload_poster', Upload_poster),
 ], debug=True)
