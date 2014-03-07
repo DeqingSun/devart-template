@@ -218,7 +218,7 @@ function draw_code(){
 		var text_width=ctx.measureText(str).width;
 		ctx.fillStyle = '#D0D0D0';
 		ctx.fillText(str,w*submit_btn[0]+(w*submit_btn[1]-text_width)/2,h*(submit_btn[2]+submit_btn[3]/2)+(-0.5)*text_size_px/4);
-		var str="Poems";
+		var str="Gallery";
 		var text_width=ctx.measureText(str).width;
 		ctx.fillText(str,w*submit_btn[0]+(w*submit_btn[1]-text_width)/2,h*(submit_btn[2]+submit_btn[3]/2)+(2.5)*text_size_px/4);
 	}
@@ -334,7 +334,7 @@ function start_trace(x,y){
 	//detect buttons;
 	var x_po=x/w;
 	var y_po=y/h;
-	if (!trace_enable && check_area(x_po,y_po,submit_btn) && !a_valid_poem) window.location.href = "submit_content.html";
+	if (!trace_enable && check_area(x_po,y_po,submit_btn) && !a_valid_poem) window.location.href = "gallery";
 	//if (a_valid_poem && poem_score==0){
 		//if (check_area(x_po,y_po,like_btn)) {submit_a_poem('G'); poem_score=1};
 		//if (check_area(x_po,y_po,dislike_btn)) {submit_a_poem('B'); poem_score=-1};

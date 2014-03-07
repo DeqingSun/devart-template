@@ -142,7 +142,7 @@ function draw_positive_animation(ptr){
 			}
 			
 			//if (display_kaleidoscope && ptr==k_fadeout-1){
-			if (display_kaleidoscope && ptr==k_fadein+1){	//change it back after test
+			if (display_kaleidoscope && ptr==k_fadein+1 && w==480 && h==640){	//change it back after test, also save space on server
 				var url=null;
 				try{
 					url = canvas.toDataURL('image/jpeg');

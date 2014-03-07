@@ -176,19 +176,27 @@ class Upload_poster(webapp2.RequestHandler):
         ct.content = poem;
         ct.poster = db.Blob(base64.b64decode(imgData));    
         ct.put();
+        #logging.info(ct.key());
         
 class Get_poster(webapp2.RequestHandler):
-     def get(self):
-        all_data_number=10;
-        #get most recent item     
-        q=Poems_content.all().ancestor(contents_key(POEM_CONTENT_NAME));
-        q.order("-time");
-        data=q.fetch(all_data_number)
-        if data[0].poster:
+     def get(self):  
+        data = db.get(self.request.get('img_key'))
+        if data.poster:
             self.response.headers['Content-Type'] = 'image/jpeg'
-            self.response.out.write(data[0].poster)
+            self.response.out.write(data.poster)
         else:
             self.error(404)
+
+class Gallery(webapp2.RequestHandler):
+    def get(self):
+        self.response.out.write("<html><head><title>Gallery</title></head><body>")
+        q=Poems_content.all().ancestor(contents_key(POEM_CONTENT_NAME));
+        q.order("-time");
+        data=q.fetch(10)
+        for i in range(0, len(data)):
+            self.response.out.write('<img src="get_poster?img_key=%s" height="640"></img><br>' % data[i].key())
+        self.response.out.write('Currently gallery only store 640*480 posters<br>');
+        self.response.out.write("</body></html>")
 
 application = webapp2.WSGIApplication([
     ('/submit', Submit_data),
@@ -198,4 +206,5 @@ application = webapp2.WSGIApplication([
     ('/fetch_data', Fetch_data),
     ('/upload_poster', Upload_poster),
     ('/get_poster', Get_poster),
+    ('/gallery', Gallery),
 ], debug=True)
