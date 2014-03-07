@@ -8,7 +8,6 @@ from google.appengine.ext import db
 from google.appengine.api import urlfetch
 from xml.etree import ElementTree as etree
 
-import re 
 import base64
 import logging
 
@@ -56,6 +55,12 @@ def fetch_data_news(data_length):
         memcache.set('recent_content',str_buf);
         return str_buf;
     return None;
+
+def base64_modify_back(base64data):
+    base64data = base64data.replace('-', '+').replace('_', '/');
+    padding_len =(4 - (len(base64data) % 4)) % 4 ;
+    base64data = base64data+('='*padding_len);
+    return base64data;
 
 class Words_content(db.Model):
     time = db. DateTimeProperty(auto_now=True);
@@ -147,14 +152,43 @@ class Fetch_data(webapp2.RequestHandler):
             self.response.write("FAIL");
 
 class Upload_poster(webapp2.RequestHandler):
-    dataUrlPattern = re.compile('data:image/(png|jpeg);base64,(.*)$');
     def post(self):
         self.response.headers['Content-Type'] = 'text/plain';
         self.response.write("Upload OK\n");
-        poem = base64.b64decode(self.request.get('poem'));
+        poem = (self.request.get('poem'));
+        poem=base64_modify_back(poem);
+        poem = base64.b64decode(poem);
         imgData = self.request.get('imgData');
-        self.response.write(poem);
+        imgData=base64_modify_back(imgData);
+        self.response.write(poem+'\n');
+        self.response.write(len(imgData));
 
+        #only keep recent 10        
+        q=Poems_content.all().ancestor(contents_key(POEM_CONTENT_NAME));
+        q.order("-time");
+        all_data_number=10;
+        data=q.fetch(all_data_number*2);
+        if (len(data)>=all_data_number):
+            for i in range(all_data_number-1, len(data)):
+                db.delete(data[i]);
+ 
+        ct = Poems_content(parent=contents_key(POEM_CONTENT_NAME));	#put into database
+        ct.content = poem;
+        ct.poster = db.Blob(base64.b64decode(imgData));    
+        ct.put();
+        
+class Get_poster(webapp2.RequestHandler):
+     def get(self):
+        all_data_number=10;
+        #get most recent item     
+        q=Poems_content.all().ancestor(contents_key(POEM_CONTENT_NAME));
+        q.order("-time");
+        data=q.fetch(all_data_number)
+        if data[0].poster:
+            self.response.headers['Content-Type'] = 'image/jpeg'
+            self.response.out.write(data[0].poster)
+        else:
+            self.error(404)
 
 application = webapp2.WSGIApplication([
     ('/submit', Submit_data),
@@ -163,4 +197,5 @@ application = webapp2.WSGIApplication([
     ('/recent_poems', Recent_Poems),
     ('/fetch_data', Fetch_data),
     ('/upload_poster', Upload_poster),
+    ('/get_poster', Get_poster),
 ], debug=True)

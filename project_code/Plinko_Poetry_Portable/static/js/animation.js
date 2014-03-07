@@ -1,5 +1,9 @@
 // JavaScript Document
 
+function modified_base64(str){
+    return str.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, '');
+}
+
 function map_range(value, low1, high1, low2, high2) {
     return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
 }
@@ -146,6 +150,8 @@ function draw_positive_animation(ptr){
 					console.log("Browser with CORS protection will not upload to gallery. Sorry.");
 				}
 				if (url!=null){
+					var img_data=url.substring( "data:image/jpeg;base64,".length )
+					img_data=modified_base64(img_data);
 					var upload = new XMLHttpRequest();
 					upload.open('POST', 'upload_poster', false);
 					upload.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -155,7 +161,8 @@ function draw_positive_animation(ptr){
 						}
 					}
 					var encoded_poem=btoa(words_selected.join(' '));
-					upload.send("poem="+encoded_poem+"&"+"imgData="+url);
+					encoded_poem=modified_base64(encoded_poem);
+					upload.send("poem="+encoded_poem+"&"+"imgData="+img_data);
 					//upload it to server
 				}
 				
