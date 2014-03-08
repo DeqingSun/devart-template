@@ -299,8 +299,8 @@ function google_images_loaded_func(value){
 			var tri_w;
 			if (smallest_w*0.5*Math.sqrt(3)<smallest_h) tri_w=smallest_w;
 			else tri_w=smallest_h*2/Math.sqrt(3);
-			
-			kaleidoscope_fill(small_canvas,0,0,tri_w,k_ctx,w,h);
+			var bleed_edge=0.0;
+			kaleidoscope_fill(small_canvas,Math.round(smallest_w*bleed_edge),Math.round(smallest_h*bleed_edge),Math.round(tri_w*(1-2*bleed_edge)),k_ctx,w,h);
 			document.getElementById("scream");
 			display_kaleidoscope=true;
 		}
