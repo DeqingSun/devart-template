@@ -235,7 +235,9 @@ function kaleidoscope_fill(img,x,y,x1,ctx,w,h){
 	var small_h=Math.ceil(small_w*0.5*sqrt3);
 	var x_num=Math.ceil(w/small_w)+1;
 	var y_num=Math.ceil((h+small_h/3)/small_h)*2;
-	
+	ctx.save();
+	ctx.fillStyle="Gray";
+	ctx.fillRect(0,0,w,h);
 	for (var j=0;j<y_num;j++){
 		var x_offset;
 		if ((j%4)==0 || (j%4)==3) x_offset=0;
