@@ -66,10 +66,10 @@ function draw_positive_animation(ptr){
 		var color_value=Math.round(255*ptr/(fade_out_frm-1));
 		for (var i=0;i<8;i++){
 			ctx.beginPath();
-			ctx.rect(0, text_pos_y[i], blackout_l[i], -text_size_px);
+			ctx.rect(0, text_pos_y[i]+text_expand, blackout_l[i], -text_size_px-2*text_expand);
 			ctx.fillStyle = 'rgb('+color_value+','+color_value+','+color_value+');';
 			ctx.fill();
-			ctx.rect(blackout_r[i], text_pos_y[i], w-blackout_r[i], -text_size_px);
+			ctx.rect(blackout_r[i], text_pos_y[i]+text_expand, w-blackout_r[i], -text_size_px-2*text_expand);
 			ctx.fill();	
 		}
 	}else if(ptr < (move_down_frm)){

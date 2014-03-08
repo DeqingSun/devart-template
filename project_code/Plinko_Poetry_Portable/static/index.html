@@ -40,6 +40,7 @@ var frame_time = 1000.0/(30); //30fps
 var move_speed = 1.0/400;	//move 1/400 per second
 //var move_speed = 1.0/100;	//move 1/400 per second
 var text_size_px;
+var text_expand;
 
 var text_pos=[];
 var text_pos_y=[];
@@ -65,6 +66,7 @@ function resize_canvas() {
 		canvas.height = h;
 		
 		text_size_px = Math.round(h/20);
+		text_expand=Math.round(0.05*text_size_px)
 		
 		for (var i=0;i<8;i++){
 			text_pos[i]=w;
@@ -120,10 +122,10 @@ function draw_code(){
 		if (line_disabled[i]){	//draw blackout part
 			//text_pos[i]-=move_speed*w;
 			ctx.beginPath();
-			ctx.rect(0, text_pos_y[i], blackout_l[i], -text_size_px);
+			ctx.rect(0, text_pos_y[i]+text_expand, blackout_l[i], -text_size_px-2*text_expand);
 			ctx.fillStyle = 'black';
 			ctx.fill();
-			ctx.rect(blackout_r[i], text_pos_y[i], w-blackout_r[i], -text_size_px);
+			ctx.rect(blackout_r[i], text_pos_y[i]+text_expand, w-blackout_r[i], -text_size_px-2*text_expand);
 			ctx.fillStyle = 'black';
 			ctx.fill();
 		}
