@@ -232,7 +232,7 @@ function draw_negative_animation(ptr){
 function kaleidoscope_fill(img,x,y,x1,ctx,w,h){
 	var sqrt3=Math.sqrt(3);
 	var small_w=x1-x;
-	var small_h=Math.ceil(small_w*0.5*sqrt3);
+	var small_h=(small_w*0.5*sqrt3);
 	var x_num=Math.ceil(w/small_w)+1;
 	var y_num=Math.ceil((h+small_h/3)/small_h)*2;
 	ctx.save();
