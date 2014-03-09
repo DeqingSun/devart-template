@@ -1,6 +1,8 @@
 This project has envolved through many stages in the past few week. Here are 3 main stages it has been:
 
-![First version](../project_images/Plinko_poetry_version_1.gif?raw=true "First version")![Second version](../project_images/Plinko_poetry_version_2.gif?raw=true "Second version")![Third version](../project_images/Plinko_poetry_version_3.gif?raw=true "Third version")
+![First version](../project_images/Plinko_poetry_version_1.gif?raw=true "First version")
+![Second version](../project_images/Plinko_poetry_version_2.gif?raw=true "Second version")
+![Third version](../project_images/Plinko_poetry_version_3.gif?raw=true "Third version")
 
 The first version implemented the most basic concept: Blackout poetry. This version will generate a black out poem when you silde your finger through all text.
 
