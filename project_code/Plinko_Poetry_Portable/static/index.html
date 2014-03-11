@@ -5,6 +5,7 @@
 <title>Plinko Poetry</title>
 
 <meta name="viewport" content="width=device-width, user-scalable=no">
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
 <style type="text/css">
 body { margin: 0px; overflow: hidden; }
 canvas { border: 0px ; }
@@ -15,6 +16,7 @@ canvas { border: 0px ; }
 
 google.load('search', '1');
 
+var font_name = "Source Sans Pro";
 var canvas,google_imgs;
 var ctx;
 var w = 0;
@@ -102,7 +104,7 @@ function draw_code(){
 	//console.log(frame_count);
 	var i;
 	ctx.clearRect(0,0,w,h);
-	ctx.font = text_size_px+"px Arial";	//draw main text
+	ctx.font = text_size_px+"px "+font_name;	//draw main text
 	ctx.textBaseline="bottom"; 
 	ctx.fillStyle = 'black';
 	
@@ -142,7 +144,7 @@ function draw_code(){
 			ctx.fillStyle = '#f0f0f0';
 			ctx.fill();
 			var str="Press and hold in this area";
-			ctx.font = text_size_px+"px Arial";	//draw main text
+			ctx.font = text_size_px+"px "+font_name;	//draw main text
 			var text_width=ctx.measureText(str).width;
 			ctx.fillStyle = '#E0E0E0';
 			ctx.fillText(str,(w-text_width)/2,h*(0.15/2)+text_size_px/2);
@@ -153,7 +155,7 @@ function draw_code(){
 		ctx.fillStyle = '#f0f0f0';
 		ctx.fill();
 		var str="Release in this area";
-		ctx.font = text_size_px+"px Arial";	//draw main text
+		ctx.font = text_size_px+"px "+font_name;	//draw main text
 		var text_width=ctx.measureText(str).width;
 		ctx.fillStyle = '#E0E0E0';
 		ctx.fillText(str,(w-text_width)/2,h*(0.95)+text_size_px/2);
@@ -216,7 +218,7 @@ function draw_code(){
 		ctx.fillStyle = '#f0f0f0';
 		ctx.fill();
 		var str="Access";
-		ctx.font = (text_size_px*.5)+"px Arial";	//draw smaller text
+		ctx.font = (text_size_px*.5)+"px "+font_name;	//draw smaller text
 		var text_width=ctx.measureText(str).width;
 		ctx.fillStyle = '#D0D0D0';
 		ctx.fillText(str,w*submit_btn[0]+(w*submit_btn[1]-text_width)/2,h*(submit_btn[2]+submit_btn[3]/2)+(-0.5)*text_size_px/4);
@@ -250,7 +252,7 @@ function draw_code(){
 
 
 function check_word(x_pos,line){
-	ctx.font = text_size_px+"px Arial";	//test main text
+	ctx.font = text_size_px+"px "+font_name;	//test main text
 	var str=text_arrays[line];
 	var ptr=0;
 	var start_pos=text_pos[line];

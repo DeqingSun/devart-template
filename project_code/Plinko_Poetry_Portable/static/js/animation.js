@@ -73,7 +73,7 @@ function draw_positive_animation(ptr){
 			ctx.fill();	
 		}
 	}else if(ptr < (move_down_frm)){
-		ctx.font = text_size_px+"px Arial";	//test main text
+		ctx.font = text_size_px+"px "+font_name;	//test main text
 	
 		ctx.beginPath();
 		ctx.rect(0, text_pos_y[7]+text_size_px*0.1, w, text_pos_y[0]-text_size_px*(1.2)-text_pos_y[7]);
