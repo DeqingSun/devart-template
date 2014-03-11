@@ -20,10 +20,10 @@ handlers:
   static_files: static/img/logo.png
   upload: static/img/logo.png
  
-- url: /favicon\.ico
-  mime_type: image/png
-  static_files: static/img/sm_logo.png
-  upload: static/img/sm_logo.png
+
+- url: /favicon.ico
+  static_files: static/img/favicon.ico
+  upload: static/img/favicon.ico
  
 - url: /(robots\.txt|crossdomain\.xml)
   static_files: static/\1
