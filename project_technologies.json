@@ -2,7 +2,8 @@
     "technologies": {
         "apis": [
             "Google Image",
-            "Google News"
+            "Google News",
+            "Google Fonts"
         ],
         "platforms": [
             "Google App Engine"
