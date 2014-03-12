@@ -1,4 +1,5 @@
 Here are some posters generated with Plinko Poetry. You can see more on http://plinko-poetry.appspot.com/gallery.
+
 If you want to add your poster to gallery, disable "same-origin policy" in your browser and adjust window resolution to 480*640. Then your poster will be uploaded automatically. 
 
 ![Poster 1](../project_images/v1_poster-1.jpg?raw=true "Poster 1")
