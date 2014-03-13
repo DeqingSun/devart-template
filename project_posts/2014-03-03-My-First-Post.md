@@ -1,6 +1,6 @@
 We're excited to start this process and starting to piece together how we're going to execute over the next few weeks. Some inital thoughts for the project. 
 
-![Cover Image](../project_images/cover.jpg?raw=true "Cover Image")
+![Cover Image](../project_images/cover_3rd.jpg?raw=true "Cover Image")
 
 Some initial thoughts on themes we'd like to explore in the project. 
 
