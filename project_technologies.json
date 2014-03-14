@@ -3,10 +3,12 @@
         "apis": [
             "Google Image",
             "Google News",
+            "Google Cast",
             "Google Fonts"
         ],
         "platforms": [
-            "Google App Engine"
+            "Google App Engine",
+            "Google Chromecast
         ],
         "toolkits": [
             "html5",
