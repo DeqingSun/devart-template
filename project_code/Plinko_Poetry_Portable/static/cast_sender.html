@@ -37,7 +37,7 @@
 
 
   <p>
-    <input id="clickMe" type="button" value="clickme" onclick="loadMedia('http://plinko-poetry.appspot.com/get_poster?img_key='+key);" />
+    <input id="clickMe" type="button" value="clickme" onclick="auto_load=true;" />
   </p>
      
   <p>
@@ -52,7 +52,8 @@
 <script src="js/cast-media.js"></script>
 
 <script type="text/javascript">
-var key;
+var key,pre_key;;
+var auto_load=false;
 function get_key(id){
 	var http = new XMLHttpRequest();
 	http.open("GET", "/get_poster_key?id="+id, true);
@@ -62,12 +63,24 @@ function get_key(id){
 			console.log(res);
 			if (res.length>0){
 				key=res;
+				if (auto_load){
+					if (pre_key!=key){
+						loadMedia('http://plinko-poetry.appspot.com/get_poster?img_key='+key);
+						pre_key=key;
+					}
+				}
 			}
 		}
 	}
 	http.send(null);
 }
 get_key(0);
+setInterval(function(){
+	if (auto_load){
+		get_key(0);
+	}
+	//loadMedia('http://plinko-poetry.appspot.com/get_poster?img_key='+key);
+},3000);
 </script>
 </body>
 </html>
