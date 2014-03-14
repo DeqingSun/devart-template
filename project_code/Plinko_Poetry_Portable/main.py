@@ -1,7 +1,7 @@
 import webapp2
 import re
 
-from google.appengine.api import memcache
+from google.appengine.api import memcache, channel
 from google.appengine.ext import ndb
 from google.appengine.ext import db
 
@@ -61,6 +61,10 @@ def base64_modify_back(base64data):
     padding_len =(4 - (len(base64data) % 4)) % 4 ;
     base64data = base64data+('='*padding_len);
     return base64data;
+
+def broadcast(message, count):
+    for id in range(count):
+        channel.send_message(str(id), message)
 
 class Poems_content(db.Model):
     time = db. DateTimeProperty(auto_now=True);
@@ -124,7 +128,15 @@ class Upload_poster(webapp2.RequestHandler):
         ct.content = poem;
         ct.poster = db.Blob(base64.b64decode(imgData));    
         ct.put();
-        #logging.info(ct.key());
+        
+        screens_count=3;
+        resp="A new Poster!!\n";
+        q=Poems_content.all().ancestor(contents_key(POEM_CONTENT_NAME));
+        q.order("-time");
+        datas=q.fetch(screens_count);
+        for data in datas:
+            resp=resp+str(data.key())+"\n";
+        broadcast(resp,screens_count);
         
 class Get_poster(webapp2.RequestHandler):
      def get(self):  
@@ -158,6 +170,16 @@ class Gallery(webapp2.RequestHandler):
             self.response.out.write('<img src="get_poster?img_key=%s" height="640"></img><br>' % data[i].key())
         self.response.out.write('Currently gallery only store 640*480 posters<br>');
         self.response.out.write("</body></html>")
+        
+class GetTokenHandler(webapp2.RequestHandler):
+    def get(self):
+        self.response.headers['Content-Type'] = 'text/plain';
+        channel_id = self.request.get('id');
+        try:
+            token = channel.create_channel(str(channel_id));
+            self.response.out.write(token);
+        except channel.InvalidChannelClientIdError:
+            self.response.out.write("ERR: TOKEN");
 
 application = webapp2.WSGIApplication([
     ('/recent', Recent_data),
@@ -166,4 +188,5 @@ application = webapp2.WSGIApplication([
     ('/get_poster', Get_poster),
     ('/get_poster_key', Get_poster_key),
     ('/gallery', Gallery),
+    ('/get_token', GetTokenHandler),
 ], debug=True)
