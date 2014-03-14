@@ -182,6 +182,7 @@ class Get_poster(webapp2.RequestHandler):
      def get(self):  
         data = db.get(self.request.get('img_key'))
         if data.poster:
+            self.response.headers.add_header("Access-Control-Allow-Origin", "*")
             self.response.headers['Content-Type'] = 'image/jpeg'
             self.response.out.write(data.poster)
         else:
