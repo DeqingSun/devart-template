@@ -188,6 +188,18 @@ class Get_poster(webapp2.RequestHandler):
         else:
             self.error(404)
 
+class Get_poster_key(webapp2.RequestHandler):
+     def get(self):
+        poster_id = int(self.request.get('id'));
+        if (poster_id>=0 and poster_id <10):
+            q=Poems_content.all().ancestor(contents_key(POEM_CONTENT_NAME));
+            q.order("-time");
+            data=q.fetch(10);
+            self.response.headers['Content-Type'] = 'text/plain';
+            self.response.write(data[poster_id].key());
+        else :
+            self.error(404)
+
 class Gallery(webapp2.RequestHandler):
     def get(self):
         self.response.out.write("<html><head><title>Gallery</title></head><body>")
@@ -207,5 +219,6 @@ application = webapp2.WSGIApplication([
     ('/fetch_data', Fetch_data),
     ('/upload_poster', Upload_poster),
     ('/get_poster', Get_poster),
+    ('/get_poster_key', Get_poster_key),
     ('/gallery', Gallery),
 ], debug=True)

@@ -1,0 +1,73 @@
+<!--
+// Copyright 2014 Google Inc. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+-->
+
+<!DOCTYPE html>
+<head>
+<title>Cast Web/Chrome Sender API Demo</title>
+<script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
+</head>
+<body>
+ 
+  <h2 style="display:block">Google Cast SDK Beta Release: Chrome SDK Media Meta Data Sample</h2>
+  <div style="border:1px solid #000; background-color:#fcf;">
+    <h3>Start/Stop Cast session by launching/stopping app</h3>
+    <button  onclick="launchApp()">Launch app</button>
+    <button  onclick="stopApp()">Stop app</button>
+    <select  onchange="autoJoin(this.value);">
+      <option value="tab_and_origin_scoped">Auto join in same tab</option>
+      <option value="origin_scoped">Auto join across tabs</option>
+      <option value="page_scoped">No auto join</option>
+    </select>
+    <span>Set auto join policy</span>
+  </div>
+
+
+
+  <p>
+    <input id="clickMe" type="button" value="clickme" onclick="loadMedia('http://plinko-poetry.appspot.com/get_poster?img_key='+key);" />
+  </p>
+     
+  <p>
+    <textarea rows="20" cols="70" id="debugmessage">
+    </textarea>
+  </p>
+        
+
+
+
+
+<script src="js/cast-media.js"></script>
+
+<script type="text/javascript">
+var key;
+function get_key(id){
+	var http = new XMLHttpRequest();
+	http.open("GET", "/get_poster_key?id="+id, true);
+	http.onreadystatechange = function() {//Call a function when the state changes.
+		if(http.readyState == 4 && http.status == 200) {
+			var res=http.responseText;
+			console.log(res);
+			if (res.length>0){
+				key=res;
+			}
+		}
+	}
+	http.send(null);
+}
+get_key(0);
+</script>
+</body>
+</html>
