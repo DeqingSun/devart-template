@@ -1,7 +1,7 @@
 import webapp2
 import re
 
-from google.appengine.api import memcache, channel
+from google.appengine.api import memcache, channel, images
 from google.appengine.ext import ndb
 from google.appengine.ext import db
 
@@ -71,6 +71,7 @@ class Poems_content(db.Model):
     content = db.StringProperty();
     comment = db.StringProperty();
     poster = db.BlobProperty();
+    poster_90 = db.BlobProperty();
 
 class Recent_data(webapp2.RequestHandler):
     def get(self):
@@ -126,7 +127,11 @@ class Upload_poster(webapp2.RequestHandler):
  
         ct = Poems_content(parent=contents_key(POEM_CONTENT_NAME));	#put into database
         ct.content = poem;
-        ct.poster = db.Blob(base64.b64decode(imgData));    
+        img_bin = base64.b64decode(imgData);
+        ct.poster = db.Blob(img_bin);
+        #img = images.Image(image_data=img_bin);
+        #img.rotate(-90);
+        #ct.poster_90 = db.Blob(img.execute_transforms(output_encoding=images.JPEG));
         ct.put();
         
         screens_count=3;
@@ -141,10 +146,14 @@ class Upload_poster(webapp2.RequestHandler):
 class Get_poster(webapp2.RequestHandler):
      def get(self):  
         data = db.get(self.request.get('img_key'))
+        rotate_90 = self.request.get('rot');
         if data.poster:
             self.response.headers.add_header("Access-Control-Allow-Origin", "*")
             self.response.headers['Content-Type'] = 'image/jpeg'
-            self.response.out.write(data.poster)
+            if (rotate_90=="t"):
+                self.response.out.write(data.poster_90)
+            else:
+                self.response.out.write(data.poster)
         else:
             self.error(404)
 
