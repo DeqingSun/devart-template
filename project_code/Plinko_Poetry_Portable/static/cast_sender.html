@@ -54,35 +54,6 @@
 <script type="text/javascript">
 var key,pre_key;;
 var auto_load=false;
-function get_key(id){
-	var http = new XMLHttpRequest();
-	http.open("GET", "/get_poster_key?id="+id, true);
-	http.onreadystatechange = function() {//Call a function when the state changes.
-		if(http.readyState == 4 && http.status == 200) {
-			var res=http.responseText;
-			console.log(res);
-			if (res.length>0){
-				key=res;
-				if (auto_load){
-					if (pre_key!=key){
-						loadMedia('http://plinko-poetry.appspot.com/get_poster?img_key='+key);
-						pre_key=key;
-					}
-				}
-			}
-		}
-	}
-	http.send(null);
-}
-get_key(0);
-setInterval(function(){
-	if (auto_load){
-		get_key(0);
-	}
-	//loadMedia('http://plinko-poetry.appspot.com/get_poster?img_key='+key);
-},3000);
-
-
 
 var token;
 function get_token(id) {
@@ -111,17 +82,22 @@ function openChannel() {
 
 function onMessage(m) {
 	var message = m.data;
-	console.log(message);
-	//message = message.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-	//$msg.prepend('<blockquote><pre>' + message + '</pre></blockquote>');
+	//console.log(message);
+	var message_arr=message.trim().split("\n");
+	if (id_num>=0 && (id_num+1)<(message_arr.length)){
+		var key=message_arr[id_num+1];
+		console.log("Key is" + key);
+	}
 }
 
-
+var id_num=-1;
 var h=window.location.hash;
 if (h.length>0){
 	h=h.replace("#","");
 	console.log(h);
 	get_token(h);
+	id_num=Number(h);
+	if (id_num==NaN) id_num=-1;
 }
 
 
