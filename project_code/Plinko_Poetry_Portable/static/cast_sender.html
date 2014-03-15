@@ -87,6 +87,13 @@ function onMessage(m) {
 	if (id_num>=0 && (id_num+1)<(message_arr.length)){
 		var key=message_arr[id_num+1];
 		console.log("Key is" + key);
+		
+		if (auto_load){
+			if (pre_key!=key){
+				loadMedia('http://plinko-poetry.appspot.com/get_poster?img_key='+key);
+				pre_key=key;
+			}
+		}
 	}
 }
 
