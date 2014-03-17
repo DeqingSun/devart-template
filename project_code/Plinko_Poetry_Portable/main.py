@@ -185,10 +185,32 @@ class GetTokenHandler(webapp2.RequestHandler):
         self.response.headers['Content-Type'] = 'text/plain';
         channel_id = self.request.get('id');
         try:
-            token = channel.create_channel(str(channel_id));
-            self.response.out.write(token);
-        except channel.InvalidChannelClientIdError:
-            self.response.out.write("ERR: TOKEN");
+            channel_id=int(channel_id);
+        except ValueError:
+            self.response.out.write("ERR: INVALID TOKEN");
+            return;
+
+        if (channel_id>=0 and channel_id<=10):
+            force_recreate = self.request.get('fr');
+            tokens = memcache.get('tokens');
+            try:
+                token = tokens[channel_id];
+            except (TypeError):
+                token = None;   
+            if (force_recreate=="t" or token==None):
+                try:
+                    token = channel.create_channel(str(channel_id),duration_minutes=24*60);
+                    self.response.out.write(token);
+                    if tokens is None:    
+                        tokens=[None]*10;
+                    tokens[channel_id]=token;
+                    memcache.set('tokens', tokens); #store it
+                except channel.InvalidChannelClientIdError:
+                    self.response.out.write("ERR: TOKEN");
+            else:
+                self.response.out.write(token);
+        else:
+            self.response.out.write("ERR: INVALID ID RANGE");
 
 application = webapp2.WSGIApplication([
     ('/recent', Recent_data),
