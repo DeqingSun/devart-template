@@ -141,7 +141,10 @@ function draw_positive_animation(ptr){
 				ctx.fillText(words_selected[i],mw_dist_x_pos[i],text_pos_y[i]);			
 			}
 			
-			//if (display_kaleidoscope && ptr==k_fadeout-1){
+			if (display_kaleidoscope && ptr==k_fadein+1){
+				eval();	//place for breakpoint
+			}
+				
 			if (display_kaleidoscope && ptr==k_fadein+1 && w==480 && h==640){	//change it back after test, also save space on server
 				var url=null;
 				try{
