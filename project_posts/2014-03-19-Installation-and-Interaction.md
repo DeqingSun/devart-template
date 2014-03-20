@@ -1,5 +1,9 @@
-This is my second post
+Here is a renderding of Plinko Poetry's installation and interaction.
 
-![Example Image](../project_images/cover_init.jpg?raw=true "Example Image")
+Placeholder...............
 
-https://www.youtube.com/watch?v=30yGOxJJ2PQ
+![Rendered GIF](../project_images/Render_animation.gif?raw=true "Rendered GIF")
+
+HD version on Youtube:
+
+https://www.youtube.com/watch?v=2w6kNYtKYFs
