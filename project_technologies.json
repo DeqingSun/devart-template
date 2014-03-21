@@ -8,7 +8,10 @@
         ],
         "platforms": [
             "Google App Engine",
-            "Google Chromecast"
+            "Google Chromecast",
+            "Google App Engine",
+            "ios",
+            "android"
         ],
         "toolkits": [
             "html5",
