@@ -1,19 +1,28 @@
-We're excited to start this process and starting to piece together how we're going to execute over the next few weeks. Some inital thoughts for the project. 
+##Context: How do we draw attention to our everyday language?
 
+<<<<<<< HEAD
+Everyday we're barraged with headlines, tweets and streams of text screaming for attention (or clicks). With the 24/7 news cycle and infinite scroll, it becomes easy to gloss over words like words like 'epidemic', 'terror', 'tragedy' and because their usage has become so common.
+=======
 ![Cover Image](../project_images/cover_3rd.jpg?raw=true "Cover Image")
+>>>>>>> FETCH_HEAD
 
-Some initial thoughts on themes we'd like to explore in the project. 
+So we were curious in ways we could draw attention to the individual words used in the headline news. By isolating them, is it possible to draw attention and question how and why they're being used- simply by allowing us a moment to pause and reflect? 
 
--Blackout poetry is interesting because it tries to create more meaning with less. By reducing and decontextualizing the information, can we derive more meaning? We want to explore that question in a playful way with a game interface. 
-![Blackout Poetry](../project_images/poem1.jpg?raw=true "Blackout Poetry")
+##Concept: What if you could make black out poetry from the news?
+Blackout poetry has long been a creative technique to derive meaning through reduction. So we thought it would be interesting to try and create black out poems from the news. 
 
--Aesthetics of automation and procedural art
-Automation in art is also an area we want to explore as it brings up questions of co-collaboration vs authorship, creating systems vs creating individual words, and variety within constraints. We added a visual element to the poems as it will be an interesting challenge to address it in the work. 
-![Automation](../project_images/automate.png?raw=true "Automation")
+Turn this:
+![Example Image](../project_images/googlenews_01.png?raw=true "Example Image")
 
--Subverting media
-By scraping news headlines and using it as our corpus, the installation seeks to isolate the words which by volume can be overwhelming and create loss of meaning. Sensational words become highlighted and allow the user to view them and experience them differently. 
-![Headlines](../project_images/headline.jpg?raw=true "Headlines")
+Into this:
+![Example Image](../project_images/googlenews_02.png?raw=true "Example Image")
+
+
+Instead of using newspapers and sharpies, we decided to use google news and a physical interface to make black out poems. We thought the interface should be playful and a user should be able to quickly create a poem within a short amount of time. We thought a plinko interface would be a good fit since it meets all those requirements and allows the user a certain amount of control while still having some element of randomness and chance.  
+
+##Content: Live streaming google news and images
+We are going to scrape google news since it's an endless source of renewed text. Also, for every word in the blackout poem we wanted to do a google image search and add an extra visual element to it. How we are going to display the visual element is TBD, but thought it would be a nice addition. 
+All the poems will be saved and published online- creating a collaboratively created book of poetry. We may try to print either posters live or a book further down the road.  
 
 
 
