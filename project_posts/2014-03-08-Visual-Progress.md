@@ -8,7 +8,7 @@ We ended up doing the kaleidoscope visual because we were really struggling with
 
 We tried different ways to manipulate the google images. We started doing basic tiling and you can see the results still aren't great. Basic tile with 'camp' image result:
 
-![Third version](../project_images/Tile_img.png?raw=true "Third version")
+![Third version](../project_images/Tiled_img.png?raw=true "Third version")
 
 Moving on, we added some random shifting to the image. Still pretty bad. 
 
