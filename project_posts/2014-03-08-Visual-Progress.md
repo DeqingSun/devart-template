@@ -25,12 +25,19 @@ How imagery is generated.
 ![Rendered GIF](../project_images/Poster_generation.gif?raw=true "Rendered GIF")
 
 Procedural steps:
+
 1. Play plinko and generate poem
+
 2. Words are isolated
+
 3. Each word search for top google image
+
 4. Flatten each image into a single image
+
 5. Create triangle from from flattened image
+
 6. Tile it to form kaleidoscope image
+
 7. Overlay poem on top of kaleidoscope image
 
 
