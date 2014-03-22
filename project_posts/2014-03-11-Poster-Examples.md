@@ -12,3 +12,5 @@ If you want to add your poster to gallery, disable "same-origin policy" in your 
 
 ![Poster 5](../project_images/v1_poster-5.jpg?raw=true "Poster 5")
 
+We will play around with the fonts and styling a little later, but want to document a working version.
+
