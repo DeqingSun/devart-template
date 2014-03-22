@@ -26,19 +26,17 @@ How imagery is generated.
 
 Procedural steps:
 
-1. Play plinko and generate poem
+1. Play plinko and generate poem text
 
-2. Words are isolated
+2. For each word in poem, search and return the top google image result
 
-3. Each word search for top google image
+3. Flatten all of the image results into a single image
 
-4. Flatten each image into a single image
+4. Create triangle from the flattened image
 
-5. Create triangle from from flattened image
+5. Tile triangle to form kaleidoscope image
 
-6. Tile it to form kaleidoscope image
-
-7. Overlay poem on top of kaleidoscope image
+6. Overlay poem on top of kaleidoscope image
 
 
 
