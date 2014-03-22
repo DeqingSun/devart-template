@@ -1,4 +1,4 @@
-Context: How do we draw attention to our everyday language?
+##Context: How do we draw attention to our everyday language?
 
 Everyday we're barraged with headlines, tweets and streams of text screaming for attention (or clicks). With the 24/7 news cycle and infinite scroll, it becomes easy to gloss over words like words like 'epidemic', 'terror', 'tragedy' and because their usage has become so common.
 
