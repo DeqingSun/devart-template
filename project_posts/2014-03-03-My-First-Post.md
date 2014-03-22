@@ -7,7 +7,7 @@ It's an overwhelming and desensitizing experience, so we are motivated to create
 ##Concept: What if you could make black out poetry from the news?
 Blackout poetry has long been a creative technique to derive meaning through reduction. So we thought it would be interesting to try and create black out poems from the news. It seemed like a fitting technique and analogy for our idea of reducing complexity into simplicity. 
 
-Turning the news into a blackout poem
+Turning the news into a black out poem:
 ![Example Image](../project_images/Blackout_poem.gif?raw=true "Example Image")
 
 
