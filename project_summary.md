@@ -19,23 +19,10 @@ We think this will be a fun exploration in disrupting our stream of digital cont
 
 [Working Prototype](http://plinko-poetry.appspot.com "Plinko Poetry Portable") | *Portrait orientation recommended.*
 
-[Poems Generated on G+](https://plus.google.com/u/0/b/116741454137931212122/) 
-
-## Example Code
-NOTE: Wrap your code blocks or any code citation by using ``` like the example below.
-```
-procedure compute_g(i):
-    if f(i,i) == 0 then
-        return 0
-    else
-        loop forever
-```
-## Links to External Libraries
- NOTE: You can also use this space to link to external libraries or Github repositories you used on your project.
-
-[Example Link](http://www.google.com "Example Link")
+[Poems Generated](http://plinko-poetry.appspot.com/gallery) 
 
 ## Images & Videos
 
 ![Cover Image](project_images/cover.jpg?raw=true "Cover Image")
 
+https://www.youtube.com/watch?v=QNx_dItGTj4
