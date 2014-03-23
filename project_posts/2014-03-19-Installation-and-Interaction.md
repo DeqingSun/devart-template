@@ -1,4 +1,4 @@
-Here is a renderding of Plinko Poetry's installation and interaction.
+Here is a rendering of Plinko Poetry's installation and interaction.
 
 More details to be added...............
 

@@ -11,7 +11,7 @@ Turning the news into a black out poem:
 ![Example Image](../project_images/Blackout_poem.gif?raw=true "Example Image")
 
 
-Instead of using newspapers and sharpies, we decided to use google news and a physical interface to make black out poems. We thought the interface should be playful and a user should be able to quickly create a poem within a short amount of time. We thought a plinko interface would be a good fit since it meets all those requirements and allows the user a certain amount of control while still having some element of randomness and chance.  
+Instead of using newspapers and sharpies, we decided to use google news and a physical interface to make black out poems. The interface should be playful and a user should be able to make a poem within a short amount of time. We thought a plinko interface is a good fit since it meets all those requirements and allows the user a certain amount of control while still having some element of randomness and chance.  
 
 ##Content: Live streaming google news and images
 Input- we are going to pull google news since it's an endless source of renewable text. The idea would be to as often as we can, scrape the news and feed it into the physical interface that way there will always be new and different text to play with. 
