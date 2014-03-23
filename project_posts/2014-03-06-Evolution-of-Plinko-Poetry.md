@@ -1,6 +1,6 @@
 #Prototype evolution
 
-This project has envolved through many stages in the past few weeks. Here are 3 main stages it has been:
+This project has envolved through many stages in the past few weeks. Here are the first couple prototypes:
 
 First prototype- The first version implemented the most basic concept: Blackout poetry. This scaled mobile version will generate a black out poem when you silde your finger through all text.
 
