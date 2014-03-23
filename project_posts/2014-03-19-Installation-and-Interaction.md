@@ -6,6 +6,6 @@ The installation and interaction
 
 ![Rendered GIF](../project_images/Render_animation.gif?raw=true "Rendered GIF")
 
-HD version on Youtube:
+Full version on Youtube:
 
-https://www.youtube.com/watch?v=OqDyfX4GkRQ
+https://www.youtube.com/watch?v=QNx_dItGTj4
