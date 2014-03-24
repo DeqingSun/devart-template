@@ -86,6 +86,42 @@
       }
   	}
     canvasCtx2.putImageData(pixels,0,0);
+    var result=detect_block_simplified(pixels);
+    if (result!=null){
+      canvasCtx2.strokeStyle = "red"
+      canvasCtx2.beginPath();
+      canvasCtx2.moveTo(0, result[1]);
+      canvasCtx2.lineTo(vid_width, result[1]);
+      canvasCtx2.moveTo(result[0],0);
+      canvasCtx2.lineTo(result[0],vid_height);
+      canvasCtx2.stroke();
+    }
+  }
+  
+  function detect_block_simplified(src){
+    var xSize = src.width,ySize = src.height,srcPixels = src.data,x, y, pos;
+    var x_pos = 0, y_pos = 0, found_num = 0;
+    var y_s = 5 * xSize * 4,x_s = 5 * 4;
+    
+    for( y=5; y<ySize-5; y++){
+      for( x=5; x<xSize-5; x++){
+
+        pos = (y*xSize+x)*4;
+
+        if (srcPixels[pos] !=0){
+          if (srcPixels[pos-x_s] !=0 && srcPixels[pos+x_s] !=0 && srcPixels[pos-y_s] !=0 && srcPixels[pos+y_s] !=0){
+            x_pos+=x;
+            y_pos+=y;
+            found_num++;
+          }
+        }
+      }
+    }
+    if (found_num>0) {
+      return [x_pos/found_num,y_pos/found_num];	
+    }else{
+      return null;	
+    }
   }
   
 </script>
