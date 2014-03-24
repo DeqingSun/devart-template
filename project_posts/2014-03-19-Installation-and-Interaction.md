@@ -1,7 +1,5 @@
 Here is a rendering of Plinko Poetry's installation and interaction.
 
-More details to be added...............
-
 The installation and interaction
 
 ![Rendered GIF](../project_images/Render_animation.gif?raw=true "Rendered GIF")
