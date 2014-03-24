@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+</head>
+
+<body>
+
+<video id="myCam" autoplay></video><br>
+<canvas id="myCvCanvas"></canvas><br>
+<canvas id="myCvCanvas2"></canvas><br>
+
+<script>
+  var intervalId, video_div, localMS, canvas, canvasCtx, canvas2, canvasCtx2;
+  var vid_width = 320; var vid_height = 240;
+  var loopSpeed = 100;
+  
+  function stopCam(){
+    video_div.src="";
+    localMS.stop(); 
+  }
+
+  // http://www.html5rocks.com/en/tutorials/getusermedia/intro/
+  // Get specific vendor methods
+  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+  window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
+    
+  if (navigator.getUserMedia) {
+    // Good to go!
+    var videoConstraints = {
+      video: {
+        mandatory: {
+          maxWidth: vid_width,
+          maxHeight: vid_height
+        }
+      }
+    };
+    // Not showing vendor prefixes.
+    navigator.getUserMedia(videoConstraints, function(localMediaStream) {
+      video_div = document.getElementById('myCam');
+      video_div.src = window.URL.createObjectURL(localMediaStream);
+      localMS=localMediaStream;
+      // Note: onloadedmetadata doesn't fire in Chrome when using it with getUserMedia.
+      // See crbug.com/110938.
+      video_div.onloadedmetadata = function(e) {
+        // Ready to go. Do some stuff.
+        console.log('Video Ready');
+        canvas = document.getElementById("myCvCanvas");
+        canvasCtx = canvas.getContext("2d");
+        canvas2 = document.getElementById("myCvCanvas2");
+        canvasCtx2 = canvas2.getContext("2d");
+        canvas.width = vid_width; 
+        canvas.height = vid_height; 
+        canvas2.width = vid_width; 
+        canvas2.height = vid_height;
+        intervalId = setInterval(cv_loop, loopSpeed);
+        //stopCam();
+      };
+    }, function(e){	//errorCallback
+      console.log('Reeeejected!', e);
+    });
+    
+  } else {
+    alert('getUserMedia() is not supported in your browser');
+  }
+  
+  function cv_loop(){
+    canvasCtx.clearRect (0, 0, vid_width, vid_height);
+    canvasCtx2.clearRect (0, 0, vid_width, vid_height);
+    
+    canvasCtx.drawImage(video_div, 0, 0, vid_width, vid_height);
+    
+    
+    var pixels = canvasCtx.getImageData(0, 0, vid_width, vid_height);
+    var colordata = pixels.data;
+    //var pixels2 = canvasCtx2.getImageData(0, 0, vid_width, vid_height);
+    for(var i = 0; i < colordata.length; i = i+4){
+      r = colordata[i];
+      g = colordata[i+1];
+      b = colordata[i+2];
+      if (r>g*3 && r>b*3 && r>50){
+        colordata[i]=255;colordata[i+1]=255;colordata[i+2]=255;
+      }else{
+        colordata[i]=0;colordata[i+1]=0;colordata[i+2]=0;		  
+      }
+  	}
+    canvasCtx2.putImageData(pixels,0,0);
+  }
+  
+</script>
+
+</body>
+</html>
