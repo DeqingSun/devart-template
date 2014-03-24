@@ -15,7 +15,7 @@ The output will be a collection of digital book of poems, co-created by the syst
 We think this will be a fun exploration in disrupting our stream of digital content and ways we can re-imagine the way we consume, create and publish.  
 
 
-## Link to Prototype
+## Link to Prototype (Work both on computer and mobile platform)
 
 [Working Prototype](http://plinko-poetry.appspot.com "Plinko Poetry Portable") | *Portrait orientation recommended.*
 
