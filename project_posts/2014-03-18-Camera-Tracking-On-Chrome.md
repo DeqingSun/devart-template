@@ -11,7 +11,7 @@ For each frame from camera, we iterate through all pixels and filter out bright 
 
 By tracking disc's position on screen frame by frame, we can get it's path and highlight words on it's path and generate a poem and poster.
 
-Here is a picture showing the computer vision process in Chrome, and a photo of screen and disc by a camera.
+Here is a picture showing the computer vision process in Chrome, and a photo of screen and disc taken by a camera.
 
 ![Chrome tracking](../project_images/Camera_tracking.jpg?raw=true "Chrome tracking")
 
