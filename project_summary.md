@@ -25,6 +25,8 @@ We think this will be a fun exploration in disrupting our stream of digital cont
 
 ![Cover Image](project_images/cover.jpg?raw=true "Cover Image")
 
+![Prototype photo](project_images/Proto_photo.jpg?raw=true "Prototype photo")
+
 https://www.youtube.com/watch?v=QNx_dItGTj4
  
 
