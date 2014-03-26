@@ -21,6 +21,12 @@ We think this will be a fun exploration in disrupting our stream of digital cont
 
 [Poems Generated](http://plinko-poetry.appspot.com/gallery) 
 
+How to play:
+
+The prototype can be played either on touch screen or with mouse. You can simply hold on top section of screen, slide down with an arbitrary curve, and release on bottom. Then you will see the generated poem and poster.
+
+![Instruction](project_images/instruction_mobile.png?raw=true "Instruction")
+
 ## Images & Videos
 
 ![Cover Image](project_images/cover.jpg?raw=true "Cover Image")
