@@ -7,6 +7,6 @@ http://www.youtube.com/watch?v=FKeqRSdP3Z8
 ![Previous Image](../project_images/Plinko-Poetry-Previous.jpg?raw=true "Previous Image")
 
 We will keep this Plinko as an on-site interaction. For people off-site, they can play this project on their tablet or phone with their fingers. 
-
+ 
 
 
